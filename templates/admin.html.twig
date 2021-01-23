@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Administration{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+       <link rel="stylesheet" href="{{ asset('css/library/w3.css') }}">
+
+
+{#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">#}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+          {% block stylesheets %}
+              <link rel="stylesheet" href= "{{ asset('css/styles.css') }}">
+              <link rel="stylesheet" href= "{{ asset('css/sidenav.css') }}">
+              <link rel="stylesheet" href= "{{ asset('css/menu-burger.css') }}">
+          {% endblock %}
+{#        <link rel="stylesheet" href="{{ asset('css/library/bootstrap.min.css') }}">#}
+    </head>
+    <body>
+        {% include 'partial/sidenav-admin.html.twig' %}
+        <div id="main" class="w3-bar w3-light-green">
+            {% include 'partial/menu-burger.html.twig' %}
+            {#          <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>#}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}
+                <div class="w3-dropdown-hover w3-right">
+                    <button class="w3-button w3-green"  style="margin-right: 15px; margin-top: -60px;">{{ app.user.firstname }} {{ app.user.lastname }}</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                        <a href="{{ path('users_profile') }}" class="w3-bar-item w3-button">Mon profil</a>
+                        <a href="{{ path('app_logout') }}" class="w3-bar-item w3-button">Se déconnecter</a>
+                    </div>
+                </div>
+            {% else %}
+                <a style="float:right;" href="{{ path('app_login')}}" class="w3-bar-item w3-button w3-mobile w3-right">
+                    <button class="button">Connexion</button>
+                </a>
+            {% endif %}
+        </div>
+        <div id="body" class="w3-container">
+           {% block body %}{% endblock %}
+         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{{ asset('js/nav-menu.js') }}"></script>
+        {% block javascripts %}
+        {% endblock %}
+    </body>
+</html>

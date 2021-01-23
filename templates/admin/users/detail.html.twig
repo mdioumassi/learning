@@ -1,0 +1,69 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Détail utilisateur{% endblock %}
+
+{% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    <div class="w3-container">
+        <a href="{{ path('admin_liste_users') }}" class="w3-margin-top"><i class="fa fa-mail-reply" style="font-size:35px;color:red"></i></a>
+        <table class="w3-table-all">
+            <tr>
+                <th>Civilité</th><td>{{ user.civility }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th><td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th><td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th><td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th><td>{{ user.phoneMobile }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th> <td>{{ user.address }}</td>
+            </tr>
+            <tr>
+                <th>Code postal</th><td>{{ user.postalCode }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th><td>{{ user.city }}</td>
+            </tr>
+        </table>
+        <div class="w3-bar w3-margin-top">
+            <a href="{{ path('admin_edit_users', {'id': user.id}) }}"><button id="valider" class="w3-btn w3-blue w3-round-large">Modifier</button></a>
+            <a href="#"><button onclick="document.getElementById('id01').style.display='block'" id="supprime" class="w3-btn w3-red w3-round-large">Supprimer</button></a>
+        </div>
+    </div>
+
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content" style="width: 350px">
+            <header class="w3-container w3-red">
+            <span onclick="document.getElementById('id01').style.display='none'"
+                  class="w3-button w3-display-topright">&times;</span>
+                <h4>SUPPRESSION</h4>
+            </header>
+            <div class="w3-container">
+                <p class="w3-center">Voulez vous supprimer ! </br> {{ user.firstname }} <strong>{{ user.lastname|upper }}</strong></p>
+            </div>
+            <footer class="w3-container w3-black w3-padding">
+                <div class="w3-bar">
+                    <a href="{{ path('admin_detail_users',  {'id': user.id} ) }}"><button class="w3-button w3-left w3-light-grey w3-round-large">Non</button></a>
+                    <a href="{{ path('admin_delete_user', {'id': user.id}) }}"><button class="w3-button w3-right w3-red w3-round-large">Oui</button></a>
+                </div>
+            </footer>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(function () {
+        $('#supprime').click(function () {
+
+        });
+    });
+</script>
+{% endblock %}

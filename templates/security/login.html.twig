@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!
+{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+{% block body %}
+
+	<div class="separator" style="margin-top: 100px;"></div>
+	<div class="container">
+		<div class="w3-panel w3-indigo w3-round">
+			<a href="{{ path('app_register') }}">
+				<h5 class="w3-center">Si vous n'êtes pas encore inscrit, vous pouvez créer votre profil ici</h5>
+			</a>
+		</div>
+
+		<h2>Please sign in</h2>
+		<form method="post">
+			{% if error %}
+				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
+
+			{% if app.user %}
+				<div class="mb-3">
+					You are logged in as
+					{{ app.user.username }},
+					<a href="{{ path('app_logout') }}">Logout</a>
+				</div>
+			{% endif %}
+
+
+			<label for="uname">
+				<b>Email</b>
+			</label>
+			<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+
+			<label for="psw">
+				<b>Password</b>
+			</label>
+			<input type="password" name="password" id="inputPassword" class="form-control" required>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+			<button type="submit">Connecter</button>
+			<label>
+				<input type="checkbox" checked="checked" name="_remember_me">
+				Remember me
+			</label>
+
+
+			<div style="background-color:#f1f1f1; padding: 0 10px 0 10px">
+				<button type="button" class="cancelbtn">Cancel</button>
+				<span class="psw">
+					<a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a>
+				</span>
+			</div>
+		</form>
+	</div>
+{% endblock %}

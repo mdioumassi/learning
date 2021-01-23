@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Bienvenue sur Madrassa{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <link rel="stylesheet" href="{{ asset('css/library/w3.css') }}">
+          {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href= "{{ asset('css/styles.css') }}">
+        <link rel="stylesheet" href= "{{ asset('css/sidenav.css') }}">
+        <link rel="stylesheet" href= "{{ asset('css/menu-burger.css') }}">
+    </head>
+    <body>
+        {% include 'partial/sidenav-users.html.twig' %}
+        <div id="main" class="w3-bar w3-border w3-indigo">
+            {% include 'partial/menu-burger.html.twig' %}
+            <span style="float: right">
+              <div class="w3-dropdown-hover w3-right">
+                <button class="w3-button w3-green" style="margin-top: -60px; margin-right: 15px;">{{ app.user.firstname }} {{ app.user.lastname }}</button>
+                <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                  <a href="{{ path('app_logout') }}" class="w3-bar-item w3-button">Se déconnecter</a>
+                </div>
+              </div>
+            </span>
+        </div>
+        <div id="body" class="w3-container">
+           {% block body %}{% endblock %}
+         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{{ asset('js/nav-menu.js') }}"></script>
+        {% block javascripts %}
+        {% endblock %}
+    </body>
+</html>

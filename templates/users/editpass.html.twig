@@ -1,0 +1,36 @@
+{% extends 'users.html.twig' %}
+
+{% block title %}Profile de {{ app.user.lastname }} {% endblock %}
+
+{% block body %}
+    {% for error in app.flashes('error') %}
+        <div class="w3-panel w3-red">
+            <p>{{ error }}</p>
+        </div>
+    {% endfor %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    <fieldset class="w3-white w3-card-2 w3-margin"><legend class="w3-green w3-padding-small"><strong>Modifier mon mot de passe</strong></legend>
+        <form class="w3-container"  method="post">
+            <p>
+                <label for="pass"><b>Mot de passe</b></label>
+                <input class="w3-input w3-border" name="pass" id="pass" type="password" required></p>
+            <p>
+                <label class="w3-text-black"><b>Confirmer le mot de passe</b></label>
+                <input class="w3-input w3-border" name="pass2" id="pass" type="password" required></p>
+            <p>
+            <div class="w3-bar">
+                <button id="back" class="w3-button w3-red w3-round-large">Annuler</button>
+                <button type="submit" class="w3-btn w3-blue w3-round-large">Valider</button>
+            </div>
+        </form>
+    </fieldset>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+            $("#back").click(function () {
+                window.location.href = "{{ path('users_profile') }}";
+            })
+        });
+    </script>
+{% endblock %}

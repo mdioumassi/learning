@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Bienvenue sur Madrassa
+			{% endblock %}
+		</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="{{ asset('css/library/w3.css') }}"> {% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/menu-burger.css') }}">
+		<style>
+			.button-connexion {
+				padding: 3px 34px;
+				font-size: 17px;
+				text-align: center;
+				cursor: pointer;
+				outline: none;
+				color: #fff;
+				background-color: #4CAF50;
+				border: none;
+				border-radius: 20px;
+				box-shadow: 0 5px #999;
+				position: absolute;
+				right: 15px;
+				width: 150px;
+				top: 18px;
+			}
+			.button-inscription {
+				padding: 3px 34px;
+				font-size: 17px;
+				text-align: center;
+				cursor: pointer;
+				outline: none;
+				color: #fff;
+				background-color: #FF0000;
+				border: none;
+				border-radius: 20px;
+				box-shadow: 0 5px #999;
+				position: absolute;
+				right: 170px;
+				width: 150px;
+				top: 18px;
+			}
+			/*.button:hover {background-color: #3e8e41}*/
+
+			/*.button:active {*/
+			/*    background-color: #3e8e41;*/
+			/*    box-shadow: 0 5px #666;*/
+			/*    transform: translateY(4px);*/
+			/*}*/
+		</style>
+	</head>
+	<body>
+		{% include 'partial/sidenav.html.twig' %}
+		<div id="main" class="w3-bar w3-indigo">
+			{% include 'partial/menu-burger.html.twig' %}
+			{#          <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>#}
+			{% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}
+				<div class="w3-dropdown-hover w3-right">
+					<button class="w3-button w3-green" style="margin-right: 15px; margin-top: -60px;">{{ app.user.firstname }}
+						{{ app.user.lastname }}</button>
+					<div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+						<a href="{{ path('users_profile') }}" class="w3-bar-item w3-button">Mon profil</a>
+						<a href="{{ path('app_logout') }}" class="w3-bar-item w3-button">Se déconnecter</a>
+					</div>
+				</div>
+			{% else %}
+				<div class="w3-container">
+					<a href="{{ path('app_register')}}">
+						<button class="button-inscription">Inscription</button>
+					</a>
+					<a style="float:right;" href="{{ path('app_login')}}" class="w3-bar-item w3-button w3-mobile w3-right">
+						<button class="button-connexion">Connexion</button>
+					</a>
+				</div>
+			{% endif %}
+		</div>
+		<div id="body" class="w3-container"> {% block body %}{% endblock %}
+			</div>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+			<script src="{{ asset('js/nav-menu.js') }}"></script>
+			{% block javascripts %}{% endblock %}
+		</body>
+	</html>

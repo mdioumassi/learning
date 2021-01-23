@@ -1,0 +1,63 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    {% for message in app.flashes('message') %}
+        <div class="w3-panel w3-green w3-padding">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+    <div class="w3-container">
+        <h2>Listes des utilisateurs</h2>
+        <table class="w3-table w3-bordered">
+            <tr>
+                <th>Id</th>
+                <th>Civilité</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Rôles</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.civility }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phoneMobile }}</td>
+                <td>
+                    {% for role in user.roles  %}
+                        {% if role == "ROLE_USER" %}
+                            Utilisateur
+                        {% elseif role == "ROLE_ADMIN" %}
+                            Administrateur
+                        {% elseif role == "ROLE_EDITOR" %}
+                            Editeur
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <div class="w3-dropdown-hover">
+                        <button class="w3-button w3-black w3-round-large">action</button>
+                        <div class="w3-dropdown-content w3-bar-block w3-border">
+                            <a href="{{ path('admin_detail_users', {'id': user.id}) }}" class="w3-bar-item w3-button">Voir</a>
+                            <a href="{{ path('admin_edit_users', {'id': user.id}) }}" class="w3-bar-item w3-button" >Modifier</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="w3-panel" style="width:40%">
+        <a href="{{ path('app_register') }}"> <button class="w3-button w3-block w3-black">Ajouter un nouveau</button></a>
+    </div>
+    <div class="w3-container w3-margin-top">
+        {{ knp_pagination_render(users) }}
+    </div>
+{% endblock %}

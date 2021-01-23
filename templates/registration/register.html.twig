@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <div class="separator" style="margin-top: 100px;"></div>
+<fieldset class="w3-white w3-card-2 w3-margin"><legend class="w3-green w3-padding-small">Inscription</legend>
+    {{ form_start(registrationForm,  {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="w3-row-padding">
+        <div class="w3-third">
+            {{ form_label(registrationForm.civility, 'Civilité') }}
+            {{ form_widget(registrationForm.civility, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.civility) }}
+        </div>
+        <div class="w3-third">
+            {{ form_label(registrationForm.email, 'Email') }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+        <div class="w3-third">
+            {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+    </div>
+    <div class="w3-row-padding">
+        <div class="w3-half">
+            {{ form_label(registrationForm.lastname, 'Nom') }}
+            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.lastname) }}
+        </div>
+        <div class="w3-half">
+            {{ form_label(registrationForm.firstname, 'Prénom') }}
+            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.firstname) }}
+        </div>
+    </div>
+    <div class="w3-row-padding">
+        <div class="w3-half">
+            {{ form_label(registrationForm.address, 'Adresse') }}
+            {{ form_widget(registrationForm.address, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.address) }}
+        </div>
+        <div class="w3-half">
+            {{ form_label(registrationForm.address_complement, 'Complément adresse') }}
+            {{ form_widget(registrationForm.address_complement, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.address_complement) }}
+        </div>
+    </div>
+    <div class="w3-row-padding">
+        <div class="w3-third">
+            {{ form_label(registrationForm.postal_code, 'Code postal') }}
+            {{ form_widget(registrationForm.postal_code, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.postal_code) }}
+        </div>
+        <div class="w3-third">
+            {{ form_label(registrationForm.city, 'Ville') }}
+            {{ form_widget(registrationForm.city, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.city) }}
+        </div>
+        <div class="w3-third">
+            {{ form_label(registrationForm.phone_mobile, 'Téléphone') }}
+            {{ form_widget(registrationForm.phone_mobile, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+            {{ form_errors(registrationForm.phone_mobile) }}
+        </div>
+    </div>
+    <div class="w3-padding">
+        {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions') }}
+        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w3-check'}}) }}
+        {{ form_errors(registrationForm.agreeTerms) }}
+    </div>
+    <p class="w3-padding">
+        <span style="color: #ff0000; font-weight: bold">*</span> Champs obligatoires.
+    </p>
+    <a href="{{ path('admin_liste_users') }}" class="w3-margin-top"><i class="fa fa-mail-reply" style="font-size:30px;color:red"></i></a>
+    <button type="submit" class="w3-btn w3-blue">Valider</button>
+    {{ form_end(registrationForm) }}
+</fieldset>
+{% endblock %}
