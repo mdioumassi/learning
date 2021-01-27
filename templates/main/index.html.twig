@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planning
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+	<style>
+		#calendrier {
+			width: 80%;
+			margin: auto;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div class="separator" style="margin-top: 100px;"></div>
+	<div id="calendrier"></div>
+	<!-- Modal create event -->
+	<div class="modal fade" id="create-event" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title"></h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<form id="form_create_event">
+					<div class="modal-body">
+							<div class="form-group">
+								<label for="email">Title:</label>
+								<input type="text" class="form-control" id="title" name="title">
+							</div>
+							<div class="form-group">
+								<label for="pwd">Date range:</label>
+								<input type="text" class="form-control" id="event_date_range"  name="event_date_range">
+								<input type="hidden" class="start_hidden"  name="start">
+								<input type="hidden" class="end_hidden"   name="end">
+							</div>
+							<div class="form-group">
+								<label for="background">Couleur:</label>
+								<select class="form-control" id="background">
+									<option value="#00cc00">Vert</option>
+									<option value="#cc3300">Rouge</option>
+									<option value="#3399ff">Bleue</option>
+								</select>
+							</div>
+					</div>
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<button type="submit" id="changeButton" class="btn"></button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.js" integrity="sha256-rPPF6R+AH/Gilj2aC00ZAuB2EKmnEjXlEWx5MkAp7bw=" crossorigin="anonymous"></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+	window.onload = () => {
+		const calendarElt = document.querySelector("#calendrier");
+		const calendar = new FullCalendar.Calendar(calendarElt, {
+			initialView: 'timeGridWeek',
+			locale: 'fr',
+			headerToolbar: {
+					start: 'prev,next today',
+					center: 'title',
+					end: 'dayGridMonth, timeGridWeek, list'
+			},
+			selectable: true,
+			editable: true,
+
+			buttonText: {
+					today: 'Aujourd\'hui',
+					month: 'Mois',
+					week: 'Semaine',
+					list: 'Liste'
+			},
+
+			timeZone: 'Europe/Paris',
+			events: {{ data|raw }},
+			nowIndicator: true,
+			eventResizableFromStart: true
+	})
+	calendar.on('eventChange', (e) => {
+		const url = `/api/${e.event.id}/edit`
+		const donnees = {
+			"title": e.event.title,
+			"description": e.event.extendedProps.description,
+			"start": e.event.start,
+			"end": e.event.end,
+			"backgroundColor": e.event.backgroundColor,
+			"borderColor": e.event.borderColor,
+			"textColor": e.event.textColor,
+			"allDay": e.event.allDay
+		}
+		const xhr = new XMLHttpRequest
+		xhr.open("PUT", url)
+		xhr.send(JSON.stringify(donnees))
+		window.location.href = "https://127.0.0.1:8000/planning"
+	})
+	//Selection d'un nouveau event
+	calendar.on('select', (e) => {
+		$("#create-event").modal("show");
+		$(".modal-title").text('Créer');
+		$("#changeButton").addClass('btn-primary').text('Ajouter')
+		$("#event_date_range").val(moment(e.start).format("YYYY-MM-DD HH:mm") + ' - ' + moment(e.end).format("YYYY-MM-DD HH:mm"));
+		$(".start_hidden").val(moment(e.start).format("YYYY-MM-DD HH:mm"));
+		$(".end_hidden").val(moment(e.end).format("YYYY-MM-DD HH:mm"));
+	})
+
+	$('form').submit(function (event) {
+		event.preventDefault();
+		const url = `/api/events/new`
+		const donnees = {
+			"title": $('#title').val(),
+			"start": $(".start_hidden").val(),
+			"end":  $(".end_hidden").val(),
+			"backgroundColor": $('#background').val()
+		}
+		const xhr = new XMLHttpRequest
+		xhr.open("POST", url)
+		xhr.send(JSON.stringify(donnees))
+		window.location.href = "https://127.0.0.1:8000/planning"
+	})
+	//Modification d'un événement
+	calendar.on('eventClick', (event, jsEvent, view) => {
+	  // console.log(event.event)
+		$(".modal-title").text('Modifier');
+		$("#changeButton").addClass('btn-success').text('Modifier')
+		$('#title').val(event.event.title)
+		$('#background').val(event.event.backgroundColor)
+		$("#event_date_range").val(moment(event.event.start).format("YYYY-MM-DD HH:mm") + ' - ' + moment(event.event.end).format("YYYY-MM-DD HH:mm"));
+		$("#create-event").modal("show");
+		$(".start_hidden").val(moment(event.event.start).format("YYYY-MM-DD HH:mm"));
+		$(".end_hidden").val(moment(event.event.end).format("YYYY-MM-DD HH:mm"));
+	})
+
+	calendar.render();
+}
+
+// let initialize_calendar;
+// initialize_calendar = () => {
+// 	$('#calendrier').each(function () {
+// 		let calendar = $(this);
+// 		calendar.full
+// 	});
+// }
+</script>
+{% endblock %}
