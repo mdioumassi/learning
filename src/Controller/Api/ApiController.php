@@ -52,8 +52,8 @@ class ApiController extends AbstractController
 //            }
            //$calendar->setAllDay($donnees->allDay);
             $calendar->setBackgroundColor($donnees->backgroundColor);
-            $calendar->setBorderColor($donnees->borderColor);
-            $calendar->setTextColor($donnees->textColor);
+//            $calendar->setBorderColor($donnees->borderColor);
+//            $calendar->setTextColor($donnees->textColor);
 
             $em->persist($calendar);
             $em->flush();

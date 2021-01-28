@@ -49,7 +49,7 @@
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="submit" id="changeButton" class="btn"></button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+{#						<button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>#}
 					</div>
 				</form>
 			</div>
@@ -111,48 +111,60 @@
 	calendar.on('select', (e) => {
 		$("#create-event").modal("show");
 		$(".modal-title").text('Créer');
-		$("#changeButton").addClass('btn-primary').text('Ajouter')
+		$("#changeButton").addClass('btn-primary ajouter').text('Ajouter')
 		$("#event_date_range").val(moment(e.start).format("YYYY-MM-DD HH:mm") + ' - ' + moment(e.end).format("YYYY-MM-DD HH:mm"));
 		$(".start_hidden").val(moment(e.start).format("YYYY-MM-DD HH:mm"));
 		$(".end_hidden").val(moment(e.end).format("YYYY-MM-DD HH:mm"));
-	})
-
-	$('form').submit(function (event) {
-		event.preventDefault();
-		const url = `/api/events/new`
-		const donnees = {
-			"title": $('#title').val(),
-			"start": $(".start_hidden").val(),
-			"end":  $(".end_hidden").val(),
-			"backgroundColor": $('#background').val()
-		}
-		const xhr = new XMLHttpRequest
-		xhr.open("POST", url)
-		xhr.send(JSON.stringify(donnees))
-		window.location.href = "https://127.0.0.1:8000/planning"
+		$('.ajouter').click(function (){
+			$('form').submit(function (event) {
+				event.preventDefault();
+				const url = `/api/events/new`
+				const donnees = {
+					"title": $('#title').val(),
+					"start": $(".start_hidden").val(),
+					"end":  $(".end_hidden").val(),
+					"backgroundColor": $('#background').val()
+				}
+				const xhr = new XMLHttpRequest
+				xhr.open("POST", url)
+				xhr.send(JSON.stringify(donnees))
+				window.location.href = "https://127.0.0.1:8000/planning"
+			})
+		})
 	})
 	//Modification d'un événement
 	calendar.on('eventClick', (event, jsEvent, view) => {
 	  // console.log(event.event)
 		$(".modal-title").text('Modifier');
-		$("#changeButton").addClass('btn-success').text('Modifier')
+		$("#changeButton").addClass('btn-success modifier').text('Modifier')
+		$(".modal-footer").append("<button type=\"button\" id=\"delete\" class=\"btn btn-danger\" >Supprimer</button>");
 		$('#title').val(event.event.title)
 		$('#background').val(event.event.backgroundColor)
 		$("#event_date_range").val(moment(event.event.start).format("YYYY-MM-DD HH:mm") + ' - ' + moment(event.event.end).format("YYYY-MM-DD HH:mm"));
 		$("#create-event").modal("show");
 		$(".start_hidden").val(moment(event.event.start).format("YYYY-MM-DD HH:mm"));
 		$(".end_hidden").val(moment(event.event.end).format("YYYY-MM-DD HH:mm"));
+		$('.modifier').click(function (){
+			$('form').submit(function (e) {
+				e.preventDefault();
+				const url = `/api/${event.event.id}/edit`
+				const donnees = {
+					"title": $('#title').val(),
+					"start": $(".start_hidden").val(),
+					"end":  $(".end_hidden").val(),
+					"backgroundColor": $('#background').val()
+				}
+				const xhr = new XMLHttpRequest
+				xhr.open("PUT", url)
+				xhr.send(JSON.stringify(donnees))
+				window.location.href = "https://127.0.0.1:8000/planning"
+			})
+		})
 	})
+		eventRender: function(info) {
 
+		})
 	calendar.render();
 }
-
-// let initialize_calendar;
-// initialize_calendar = () => {
-// 	$('#calendrier').each(function () {
-// 		let calendar = $(this);
-// 		calendar.full
-// 	});
-// }
 </script>
 {% endblock %}
