@@ -7,76 +7,191 @@
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
     <div class="separator" style="margin-top: 100px;"></div>
-<fieldset class="w3-white w3-card-2 w3-margin"><legend class="w3-green w3-padding-small">Inscription</legend>
-    {{ form_start(registrationForm,  {'attr': {'novalidate': 'novalidate'}}) }}
-    <div class="w3-row-padding">
-        <div class="w3-third">
-            {{ form_label(registrationForm.civility, 'Civilité') }}
-            {{ form_widget(registrationForm.civility, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.civility) }}
+    <div class="w3-container">
+        <div class="w3-bar w3-black">
+            <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'Contact')">Contact</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Paris')">Paris</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Tokyo')">Tokyo</button>
         </div>
-        <div class="w3-third">
-            {{ form_label(registrationForm.email, 'Email') }}
-            {{ form_widget(registrationForm.email, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.email) }}
+
+        <div id="Contact" class="w3-container w3-border city">
+            <fieldset class="w3-white w3-border w3-margin"><legend class="w3-green w3-padding-small">Contact</legend>
+                    {{ form_start(registrationForm,  {'attr': {'novalidate': 'novalidate'}}) }}
+                    <div class="w3-row-padding">
+                        <div class="w3-third">
+                            {{ form_label(registrationForm.civility, 'Civilité') }}
+                            {{ form_widget(registrationForm.civility, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                            {{ form_errors(registrationForm.civility) }}
+                        </div>
+                        <div class="w3-third">
+                            {{ form_row(registrationForm.password.first, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                        </div>
+                        <div class="w3-third">
+                            {{ form_row(registrationForm.password.second, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                        </div>
+                    </div>
+                    <div class="w3-padding">
+                        {{ form_label(registrationForm.email, 'Email') }}
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+                    <div class="w3-row-padding">
+                        <div class="w3-third">
+                            {{ form_label(registrationForm.lastname, 'Nom') }}
+                            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                            {{ form_errors(registrationForm.lastname) }}
+                        </div>
+                        <div class="w3-third">
+                            {{ form_label(registrationForm.firstname, 'Prénom') }}
+                            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                            {{ form_errors(registrationForm.firstname) }}
+                        </div>
+                        <div class="w3-third">
+                            {{ form_label(registrationForm.phone_mobile, 'Téléphone') }}
+                            {{ form_widget(registrationForm.phone_mobile, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
+                            {{ form_errors(registrationForm.phone_mobile) }}
+                        </div>
+                    </div>
+{#                    <div class="w3-row-padding">#}
+{#                        <div class="w3-half">#}
+{#                            {{ form_label(registrationForm.address, 'Adresse') }}#}
+{#                            {{ form_widget(registrationForm.address, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#                            {{ form_errors(registrationForm.address) }}#}
+{#                        </div>#}
+{#                        <div class="w3-half">#}
+{#                            {{ form_label(registrationForm.address_complement, 'Complément adresse') }}#}
+{#                            {{ form_widget(registrationForm.address_complement, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#                            {{ form_errors(registrationForm.address_complement) }}#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="w3-row-padding">#}
+{#                        <div class="w3-third">#}
+{#                            {{ form_label(registrationForm.postal_code, 'Code postal') }}#}
+{#                            {{ form_widget(registrationForm.postal_code, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#                            {{ form_errors(registrationForm.postal_code) }}#}
+{#                        </div>#}
+{#                        <div class="w3-third">#}
+{#                            {{ form_label(registrationForm.city, 'Ville') }}#}
+{#                            {{ form_widget(registrationForm.city, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#                            {{ form_errors(registrationForm.city) }}#}
+{#                        </div>#}
+{#                        <div class="w3-third">#}
+{#                            {{ form_label(registrationForm.phone_mobile, 'Téléphone') }}#}
+{#                            {{ form_widget(registrationForm.phone_mobile, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#                            {{ form_errors(registrationForm.phone_mobile) }}#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="w3-padding">
+                        {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions') }}
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w3-check'}}) }}
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                    <p class="w3-padding">
+                        <span style="color: #ff0000; font-weight: bold">*</span> Champs obligatoires.
+                    </p>
+                    <a href="{{ path('admin_liste_users') }}" class="w3-margin-top"><i class="fa fa-mail-reply" style="font-size:30px;color:red"></i></a>
+                    <button type="submit" class="w3-btn w3-blue">Valider</button>
+                    {{ form_end(registrationForm) }}
+                </fieldset>
         </div>
-        <div class="w3-third">
-            {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
-            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.plainPassword) }}
+
+        <div id="Paris" class="w3-container w3-border city" style="display:none">
+            <h2>Paris</h2>
+            <p>Paris is the capital of France.</p>
+        </div>
+
+        <div id="Tokyo" class="w3-container w3-border city" style="display:none">
+            <h2>Tokyo</h2>
+            <p>Tokyo is the capital of Japan.</p>
         </div>
     </div>
-    <div class="w3-row-padding">
-        <div class="w3-half">
-            {{ form_label(registrationForm.lastname, 'Nom') }}
-            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.lastname) }}
-        </div>
-        <div class="w3-half">
-            {{ form_label(registrationForm.firstname, 'Prénom') }}
-            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.firstname) }}
-        </div>
-    </div>
-    <div class="w3-row-padding">
-        <div class="w3-half">
-            {{ form_label(registrationForm.address, 'Adresse') }}
-            {{ form_widget(registrationForm.address, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.address) }}
-        </div>
-        <div class="w3-half">
-            {{ form_label(registrationForm.address_complement, 'Complément adresse') }}
-            {{ form_widget(registrationForm.address_complement, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.address_complement) }}
-        </div>
-    </div>
-    <div class="w3-row-padding">
-        <div class="w3-third">
-            {{ form_label(registrationForm.postal_code, 'Code postal') }}
-            {{ form_widget(registrationForm.postal_code, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.postal_code) }}
-        </div>
-        <div class="w3-third">
-            {{ form_label(registrationForm.city, 'Ville') }}
-            {{ form_widget(registrationForm.city, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.city) }}
-        </div>
-        <div class="w3-third">
-            {{ form_label(registrationForm.phone_mobile, 'Téléphone') }}
-            {{ form_widget(registrationForm.phone_mobile, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}
-            {{ form_errors(registrationForm.phone_mobile) }}
-        </div>
-    </div>
-    <div class="w3-padding">
-        {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions') }}
-        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w3-check'}}) }}
-        {{ form_errors(registrationForm.agreeTerms) }}
-    </div>
-    <p class="w3-padding">
-        <span style="color: #ff0000; font-weight: bold">*</span> Champs obligatoires.
-    </p>
-    <a href="{{ path('admin_liste_users') }}" class="w3-margin-top"><i class="fa fa-mail-reply" style="font-size:30px;color:red"></i></a>
-    <button type="submit" class="w3-btn w3-blue">Valider</button>
-    {{ form_end(registrationForm) }}
-</fieldset>
+{#<fieldset class="w3-white w3-card-2 w3-margin"><legend class="w3-green w3-padding-small">Inscription</legend>#}
+{#    {{ form_start(registrationForm,  {'attr': {'novalidate': 'novalidate'}}) }}#}
+{#    <div class="w3-row-padding">#}
+{#        <div class="w3-third">#}
+{#            {{ form_label(registrationForm.civility, 'Civilité') }}#}
+{#            {{ form_widget(registrationForm.civility, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.civility) }}#}
+{#        </div>#}
+{#        <div class="w3-third">#}
+{#            {{ form_label(registrationForm.email, 'Email') }}#}
+{#            {{ form_widget(registrationForm.email, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.email) }}#}
+{#        </div>#}
+{#        <div class="w3-third">#}
+{#            {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}#}
+{#            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.plainPassword) }}#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="w3-row-padding">#}
+{#        <div class="w3-half">#}
+{#            {{ form_label(registrationForm.lastname, 'Nom') }}#}
+{#            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.lastname) }}#}
+{#        </div>#}
+{#        <div class="w3-half">#}
+{#            {{ form_label(registrationForm.firstname, 'Prénom') }}#}
+{#            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.firstname) }}#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="w3-row-padding">#}
+{#        <div class="w3-half">#}
+{#            {{ form_label(registrationForm.address, 'Adresse') }}#}
+{#            {{ form_widget(registrationForm.address, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.address) }}#}
+{#        </div>#}
+{#        <div class="w3-half">#}
+{#            {{ form_label(registrationForm.address_complement, 'Complément adresse') }}#}
+{#            {{ form_widget(registrationForm.address_complement, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.address_complement) }}#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="w3-row-padding">#}
+{#        <div class="w3-third">#}
+{#            {{ form_label(registrationForm.postal_code, 'Code postal') }}#}
+{#            {{ form_widget(registrationForm.postal_code, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.postal_code) }}#}
+{#        </div>#}
+{#        <div class="w3-third">#}
+{#            {{ form_label(registrationForm.city, 'Ville') }}#}
+{#            {{ form_widget(registrationForm.city, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.city) }}#}
+{#        </div>#}
+{#        <div class="w3-third">#}
+{#            {{ form_label(registrationForm.phone_mobile, 'Téléphone') }}#}
+{#            {{ form_widget(registrationForm.phone_mobile, {'attr': {'class': 'w3-input w3-border w3-round'}}) }}#}
+{#            {{ form_errors(registrationForm.phone_mobile) }}#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="w3-padding">#}
+{#        {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions') }}#}
+{#        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w3-check'}}) }}#}
+{#        {{ form_errors(registrationForm.agreeTerms) }}#}
+{#    </div>#}
+{#    <p class="w3-padding">#}
+{#        <span style="color: #ff0000; font-weight: bold">*</span> Champs obligatoires.#}
+{#    </p>#}
+{#    <a href="{{ path('admin_liste_users') }}" class="w3-margin-top"><i class="fa fa-mail-reply" style="font-size:30px;color:red"></i></a>#}
+{#    <button type="submit" class="w3-btn w3-blue">Valider</button>#}
+{#    {{ form_end(registrationForm) }}#}
+{#</fieldset>#}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function openCity(evt, cityName) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("city");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " w3-red";
+        }
+    </script>
 {% endblock %}

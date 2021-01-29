@@ -134,7 +134,6 @@
 	})
 	//Modification d'un événement
 	calendar.on('eventClick', (event, jsEvent, view) => {
-	  // console.log(event.event)
 		$(".modal-title").text('Modifier');
 		$("#changeButton").addClass('btn-success modifier').text('Modifier')
 		$(".modal-footer").append("<button type=\"button\" id=\"delete\" class=\"btn btn-danger\" >Supprimer</button>");
@@ -161,9 +160,6 @@
 			})
 		})
 	})
-		eventRender: function(info) {
-
-		})
 	calendar.render();
 }
 </script>

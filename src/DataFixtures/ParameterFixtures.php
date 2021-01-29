@@ -10,31 +10,65 @@ class ParameterFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $parameter1 = new Parameter();
-        $parameter1
-            ->setId('CIVILITE-M')
-            ->setCategories($this->getReference('category_civilite'))
-            ->setLabel('Monsieur')
-            ->setActive('1');
-        $manager->persist($parameter1);
-
-        $parameter2 = new Parameter();
-        $parameter2
-            ->setId('CIVILITE-MLLE')
-            ->setCategories($this->getReference('category_civilite'))
-            ->setLabel('Mademoiselle')
-            ->setActive('1');
-        $manager->persist($parameter2);
-
-        $parameter3 = new Parameter();
-        $parameter3
-            ->setId('CIVILITE-MME')
-            ->setCategories($this->getReference('category_civilite'))
-            ->setLabel('Madame')
-            ->setActive('1');
-        $manager->persist($parameter3);
-
+        $parametres = [
+            'CIVILITE' => [
+                '0' => [
+                    'id' => 'CIVILITE-M',
+                    'label' => 'Monsieur',
+                    'active' => 1
+                ],
+                '1' => [
+                    'id' => 'CIVILITE-MLLE',
+                    'label' => 'Mademoiselle',
+                    'active' => 1
+                ],
+                '2' => [
+                    'id' => 'CIVILITE-MME',
+                    'label' => 'Madame',
+                    'active' => 1
+                ],
+            ],
+            'DEBUTANT' => [
+                '0' => [
+                    'id' => 'COMPRENDRE-WEB',
+                    'label' => 'Comprendre le web',
+                    'active' => 1
+                ],
+                '1' => [
+                    'id' => 'HTML-CSS',
+                    'label' => 'Html5 & Css3',
+                    'active' => 1
+                ],
+                '2' => [
+                    'id' => 'JAVASCRIPT',
+                    'label' => 'Javascript',
+                    'active' => 1
+                ],
+            ]
+        ];
+     foreach ($parametres as $key => $parametre) {
+        if ($key == 'CIVILITE') {
+            $this->getData($parametre, $key, 'civilite', $manager);
+        }
+        if ($key == 'DEBUTANT') {
+             $this->getData($parametre, $key, 'debutant', $manager);
+        }
+     }
         $manager->flush();
+    }
+
+    public function getData(array $data, $groupe, $categorie, ObjectManager $manager)
+    {
+        $i = 0;
+        while ($i < count($data)) {
+            $param = new Parameter();
+            $param->setId($data[$i]['id']);
+            $param->setCategories($this->getReference($categorie));
+            $param->setLabel($data[$i]['label']);
+            $param->setActive($data[$i]['active']);
+            $manager->persist($param);
+            $i++;
+        }
     }
 
     public function getDependencies()

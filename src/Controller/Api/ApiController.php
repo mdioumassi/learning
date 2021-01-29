@@ -13,16 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ApiController extends AbstractController
 {
     /**
-     * @Route("/api", name="api")
-     */
-    public function index(): Response
-    {
-        return $this->render('api/index.html.twig', [
-            'controller_name' => 'ApiController',
-        ]);
-    }
-
-    /**
      * @Route("/api/{id}/edit", name="api_event_edit", methods={"PUT"})
      */
     public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em): Response

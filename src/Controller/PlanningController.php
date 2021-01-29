@@ -31,6 +31,6 @@ class PlanningController extends AbstractController
             ];
         }
         $data = json_encode($rdvs);
-        return $this->render('main/index.html.twig', compact('data'));
+        return $this->render('planning/index.html.twig', compact('data'));
     }
 }
