@@ -6,6 +6,7 @@ use App\Entity\Users;
 use App\Entity\Parameter;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,8 +17,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -148,20 +147,7 @@ class RegistrationFormType extends AbstractType
                 },
                 'choice_label' => 'label'
             ]);
-        /*  ->add('civility', ChoiceType::class, [
-                'placeholder' => 'Choisir',
-                'choices'  => [
-                    'Mr' => 'MR',
-                    'Mme' => 'MME',
-                    'Mlle' => 'MLLE',
-                ],
-                'required' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir choisir une civilité.',
-                    ]),
-                ]
-            ]);*/
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

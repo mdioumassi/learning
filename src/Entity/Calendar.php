@@ -57,6 +57,11 @@ class Calendar
      */
     private $text_color;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="calendars")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +159,18 @@ class Calendar
     public function setTextColor(string $text_color): self
     {
         $this->text_color = $text_color;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

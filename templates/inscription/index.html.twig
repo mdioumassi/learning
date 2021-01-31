@@ -1,7 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello InscriptionController!{% endblock %}
+{% block title %}Inscription!{% endblock %}
 
 {% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
 
+    <div class="w3-container">
+        <div class="w3-bar w3-grey">
+            <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'Etudiant')">Etudiant</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Paris')">Paris</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Tokyo')">Tokyo</button>
+        </div>
+
+        <div id="Etudiant" class="w3-container w3-border city">
+            <table class="table table-bordered w3-margin-top">
+                <tr><th class="w3-indigo">Nom: </th><td>{{ user.firstname }}</td></tr>
+                <tr><th class="w3-indigo">Prénom: </th><td>{{ user.lastname }}</td></tr>
+                <tr><th class="w3-indigo">Email: </th><td>{{ user.email }}</td></tr>
+                <tr><th class="w3-indigo">Téléphone: </th><td>{{ user.phoneMobile }}</td></tr>
+            </table>
+            <div class="w3-bar w3-margin-bottom">
+              <button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
+              <a href="{{ path('inscription_level') }}"><button class="w3-button w3-right w3-green">Suivant &raquo;</button></a>
+            </div>
+        </div>
+
+        <div id="Paris" class="w3-container w3-border city" style="display:none">
+            <h2>Paris</h2>
+            <p>Paris is the capital of France.</p>
+        </div>
+
+        <div id="Tokyo" class="w3-container w3-border city" style="display:none">
+            <h2>Tokyo</h2>
+            <p>Tokyo is the capital of Japan.</p>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
 {% endblock %}

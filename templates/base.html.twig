@@ -59,6 +59,11 @@
 		<div id="main" class="w3-bar w3-indigo">
 			{% include 'partial/menu-burger.html.twig' %}
 			{#          <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>#}
+			{% for message in app.flashes('success') %}
+				<div class="w3-panel w3-green w3-padding">
+					<p>{{ message }}</p>
+				</div>
+			{% endfor %}
 			{% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}
 				<div class="w3-dropdown-hover w3-right">
 					<button class="w3-button w3-green" style="margin-right: 15px; margin-top: -60px;">{{ app.user.firstname }}
@@ -81,8 +86,27 @@
 		</div>
 		<div id="body" class="w3-container"> {% block body %}{% endblock %}
 			</div>
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-			<script src="{{ asset('js/nav-menu.js') }}"></script>
-			{% block javascripts %}{% endblock %}
+
+			{% block javascripts %}
+				<script src="{{ asset('js/nav-menu.js') }}"></script>
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+				<script>
+					function openCity(evt, cityName) {
+						var i, x, tablinks;
+						x = document.getElementsByClassName("city");
+						for (i = 0; i < x.length; i++) {
+							x[i].style.display = "none";
+						}
+						tablinks = document.getElementsByClassName("tablink");
+						for (i = 0; i < x.length; i++) {
+							tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+						}
+						document.getElementById(cityName).style.display = "block";
+						evt.currentTarget.className += " w3-red";
+					}
+				</script>
+			{% endblock %}
 		</body>
 	</html>

@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<style>
+    .cc-selector input{
+        margin:0;padding:0;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+    }
+
+    .cc-selector-2 input{
+        position:absolute;
+        z-index:999;
+    }
+
+    .debutant{background-image:url(https://via.placeholder.com/250x150/0000FF/808080?text=DEBUTANT);}
+    .avance{background-image:url(https://via.placeholder.com/250x150/0000FF/808080?text=AVANCE);}
+    .expert{background-image:url(https://via.placeholder.com/250x150/0000FF/808080?text=EXPERT);}
+
+    .cc-selector-2 input:active +.drinkcard-cc, .cc-selector input:active +.drinkcard-cc{opacity: .9;}
+    .cc-selector-2 input:checked +.drinkcard-cc, .cc-selector input:checked +.drinkcard-cc{
+        -webkit-filter: none;
+        -moz-filter: none;
+        filter: none;
+    }
+    .drinkcard-cc{
+        cursor:pointer;
+        background-size:contain;
+        background-repeat:no-repeat;
+        display:inline-block;
+        width:250px;height:150px;
+        -webkit-transition: all 100ms ease-in;
+        -moz-transition: all 100ms ease-in;
+        transition: all 100ms ease-in;
+        -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+        filter: brightness(1.8) grayscale(1) opacity(.7);
+    }
+    .drinkcard-cc:hover{
+        -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+        filter: brightness(1.2) grayscale(.5) opacity(.9);
+    }
+
+    /* Extras */
+    a:visited{color:#888}
+    a{color:#444;text-decoration:none;}
+    p{margin-bottom:.3em;}
+    * { font-family:monospace; }
+    .cc-selector-2 input{ margin: 5px 0 0 12px; }
+    .cc-selector-2 label{ margin-left: 7px; }
+    span.cc{ color:#6d84b4 }
+</style>
+{% endblock %}
+{% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    <div class="w3-container">
+        <div class="w3-bar w3-grey">
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Etudiant')">ETUDIANT</button>
+            <button class="w3-bar-item w3-button tablink  w3-red" onclick="openCity(event,'Niveau')">NIVEAU</button>
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Formation')">FORMATIONS</button>
+        </div>
+
+        <div id="Etudiant" class="w3-container w3-border city"  style="display:none">
+            <table class="table table-bordered w3-margin-top">
+                <tr><th class="w3-indigo">Nom: </th><td>{{ user.firstname }}</td></tr>
+                <tr><th class="w3-indigo">Prénom: </th><td>{{ user.lastname }}</td></tr>
+                <tr><th class="w3-indigo">Email: </th><td>{{ user.email }}</td></tr>
+                <tr><th class="w3-indigo">Téléphone: </th><td>{{ user.phoneMobile }}</td></tr>
+            </table>
+
+        </div>
+
+        <div id="Niveau" class="w3-container w3-border city">
+            <form class="w3-margin-top" method="post" action="{{ path('inscription_level') }}">
+                <div class="cc-selector-2">
+                    <input checked="checked"  id="debutant" type="radio" name="level" value="DEBUTANT" />
+                    <label class="drinkcard-cc debutant" for="debutant"></label>
+
+                    <input  id="avance" type="radio" name="level" value="AVANCE" />
+                    <label class="drinkcard-cc avance"for="avance"></label>
+
+                    <input  id="expert" type="radio" name="level" value="EXPERT" />
+                    <label class="drinkcard-cc expert" for="expert"></label>
+                </div>
+                <div class="w3-bar w3-margin-bottom">
+                    <a href="{{ path('inscription_etudiant') }}"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
+                    <a href="{{ path('inscription_level') }}"><button type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button></a>
+                </div>
+            </form>
+        </div>
+
+        <div id="Tokyo" class="w3-container w3-border city" style="display:none">
+            <h2>Tokyo</h2>
+            <p>Tokyo is the capital of Japan.</p>
+        </div>
+    </div>
+
+{% endblock %}

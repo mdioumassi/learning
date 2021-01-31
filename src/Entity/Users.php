@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -86,9 +88,21 @@ class Users implements UserInterface
      */
     private $created_at;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Level::class, inversedBy="users")
+     */
+    private $levels;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Calendar::class, mappedBy="user")
+     */
+    private $calendars;
+
     public function __construct()
     {
         $this->created_at = new \DateTime("now");
+        $this->levels = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -285,6 +299,60 @@ class Users implements UserInterface
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Level[]
+     */
+    public function getLevels(): Collection
+    {
+        return $this->levels;
+    }
+
+    public function addLevel(Level $level): self
+    {
+        if (!$this->levels->contains($level)) {
+            $this->levels[] = $level;
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): self
+    {
+        $this->levels->removeElement($level);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Calendar[]
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): self
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars[] = $calendar;
+            $calendar->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): self
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getUser() === $this) {
+                $calendar->setUser(null);
+            }
+        }
 
         return $this;
     }
