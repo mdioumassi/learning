@@ -57,8 +57,8 @@
     <div class="w3-container">
         <div class="w3-bar w3-grey">
             <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Etudiant')">ETUDIANT</button>
-            <button class="w3-bar-item w3-button tablink  w3-red" onclick="openCity(event,'Niveau')">NIVEAU</button>
-            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Formation')">FORMATIONS</button>
+            <button class="w3-bar-item w3-button tablink " onclick="openCity(event,'Niveau')">NIVEAU</button>
+            <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'Formation')">FORMATIONS</button>
         </div>
 
         <div id="Etudiant" class="w3-container w3-border city"  style="display:none">
@@ -71,26 +71,38 @@
 
         </div>
 
-        <div id="Niveau" class="w3-container w3-border city">
-            <form class="w3-margin-top" method="post" action="{{ path('inscription_level') }}">
+        <div id="Niveau" class="w3-container w3-border city"  style="display:none">
+            <form class="w3-margin-top" method="post" action="">
                 <div class="cc-selector-2">
                     {% for level in levels %}
-                    <input id="{{ level.label }}" type="radio" name="level" value="{{ level.id }}" />
-                    <label class="drinkcard-cc" for="{{ level.label }}">
-                        <img src="https://via.placeholder.com/250x150/00b300/404040?text={{ level.id }}" alt="">
-                    </label>
+                        <input id="{{ level.label }}" type="radio" name="level" value="{{ level.id }}" />
+                        <label class="drinkcard-cc" for="{{ level.label }}">
+                            <img src="https://via.placeholder.com/250x150/00b300/404040?text={{ level.id }}" alt="">
+                        </label>
+                    {% endfor %}
+                </div>
+{#                <div class="w3-bar w3-margin-bottom">#}
+{#                    <a href="{{ path('inscription_etudiant') }}"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>#}
+{#                    <a href="{{ path('inscription_level') }}"><button type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button></a>#}
+{#                </div>#}
+            </form>
+        </div>
+
+        <div id="Formation" class="w3-container w3-border city" >
+            <form class="w3-margin-top" method="post" action="{{ path('inscription_level_training') }}">
+                <div class="cc-selector-2">
+                    {% for training in trainings %}
+                        <input id="{{ training.label }}" type="checkbox" name="{{ training.id }}" value="{{ training.id }}" />
+                        <label class="drinkcard-cc" for="{{ training.label }}">
+                            <img src="https://via.placeholder.com/250x150/00b300/404040?text={{ training.label|upper }}" alt="">
+                        </label>
                     {% endfor %}
                 </div>
                 <div class="w3-bar w3-margin-bottom">
                     <a href="{{ path('inscription_etudiant') }}"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
-                    <a href="{{ path('inscription_level') }}"><button type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button></a>
+                  <button type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button>
                 </div>
             </form>
-        </div>
-
-        <div id="Tokyo" class="w3-container w3-border city" style="display:none">
-            <h2>Tokyo</h2>
-            <p>Tokyo is the capital of Japan.</p>
         </div>
     </div>
 

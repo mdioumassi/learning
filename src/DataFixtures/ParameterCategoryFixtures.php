@@ -38,6 +38,13 @@ class ParameterCategoryFixtures extends Fixture
         $manager->persist($category3);
         $this->addReference('expert', $category3);
 
+        $category4 = new ParameterCategory();
+        $category4
+            ->setId('NIVEAU')
+            ->setLabel('Niveau');
+        $manager->persist($category4);
+        $this->addReference('niveau', $category4);
+
 
         $manager->flush();
     }

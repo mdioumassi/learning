@@ -44,6 +44,23 @@ class ParameterFixtures extends Fixture
                     'label' => 'Javascript',
                     'active' => 1
                 ],
+            ],
+            'NIVEAU' => [
+                '0' => [
+                    'id' => 'DEBUTANT',
+                    'label' => 'debutant',
+                    'active' => 1
+                ],
+                '1' => [
+                    'id' => 'AVANCE',
+                    'label' => 'avance',
+                    'active' => 1
+                ],
+                '2' => [
+                    'id' => 'EXPERT',
+                    'label' => 'expert',
+                    'active' => 1
+                ],
             ]
         ];
      foreach ($parametres as $key => $parametre) {
@@ -53,6 +70,9 @@ class ParameterFixtures extends Fixture
         if ($key == 'DEBUTANT') {
              $this->getData($parametre, $key, 'debutant', $manager);
         }
+         if ($key == 'NIVEAU') {
+             $this->getData($parametre, $key, 'niveau', $manager);
+         }
      }
         $manager->flush();
     }
