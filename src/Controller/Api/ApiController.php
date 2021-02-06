@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Form\CalendarType;
 use DateTime;
 use App\Entity\Calendar;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,6 +61,7 @@ class ApiController extends AbstractController
     public function newEvents(Request $request, EntityManagerInterface $manager)
     {
           $calendar = new Calendar();
+          $form = $this->createForm(CalendarType::class);
           $donnees = json_decode($request->getContent());
         if (
             isset($donnees->title) && !empty($donnees->title) &&

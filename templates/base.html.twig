@@ -56,7 +56,7 @@
 	</head>
 	<body>
 		{% include 'partial/sidenav.html.twig' %}
-		<div id="main" class="w3-bar w3-indigo">
+		<div id="main" class="w3-bar w3-indigo" style="z-index: 9">
 			{% include 'partial/menu-burger.html.twig' %}
 			{#          <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>#}
 			{% for message in app.flashes('success') %}
@@ -88,25 +88,25 @@
 			</div>
 
 			{% block javascripts %}
-				<script src="{{ asset('js/nav-menu.js') }}"></script>
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+				<script src="{{ asset('js/nav-menu.js') }}"></script>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-				<script>
-					function openCity(evt, cityName) {
-						var i, x, tablinks;
-						x = document.getElementsByClassName("city");
-						for (i = 0; i < x.length; i++) {
-							x[i].style.display = "none";
-						}
-						tablinks = document.getElementsByClassName("tablink");
-						for (i = 0; i < x.length; i++) {
-							tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
-						}
-						document.getElementById(cityName).style.display = "block";
-						evt.currentTarget.className += " w3-red";
-					}
-				</script>
+{#				<script>#}
+				{#	function openCity(evt, cityName) {#}
+				{#		var i, x, tablinks;#}
+				{#		x = document.getElementsByClassName("city");#}
+				{#		for (i = 0; i < x.length; i++) {#}
+				{#			x[i].style.display = "none";#}
+				{#		}#}
+				{#		tablinks = document.getElementsByClassName("tablink");#}
+				{#		for (i = 0; i < x.length; i++) {#}
+				{#			tablinks[i].className = tablinks[i].className.replace(" w3-red", "");#}
+				{#		}#}
+				{#		document.getElementById(cityName).style.display = "block";#}
+				{#		evt.currentTarget.className += " w3-red";#}
+				{#	}#}
+				{#</script>#}
 			{% endblock %}
 		</body>
 	</html>

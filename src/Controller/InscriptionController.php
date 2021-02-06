@@ -2,24 +2,29 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendar;
 use App\Entity\Level;
 use App\Entity\Training;
 use App\Form\LevelType;
+use App\Repository\CalendarRepository;
 use App\Repository\LevelRepository;
 use App\Repository\ParameterRepository;
+use App\Repository\UsersRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/inscription/etudiant", name="inscription_")
+ * @Route("/inscription", name="inscription_")
  */
 class InscriptionController extends AbstractController
 {
     /**
-     * @Route("/", name="etudiant")
+     * @Route("/etudiant", name="etudiant")
      */
     public function etudiant()
     {
@@ -29,7 +34,7 @@ class InscriptionController extends AbstractController
     }
 
     /**
-     * @Route("/level", name="level")
+     * @Route("/level/", name="level")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
@@ -38,9 +43,9 @@ class InscriptionController extends AbstractController
     {
         $session->start();
        $levels = $repository->findBy(['categories' => 'NIVEAU']);
-      if (empty($levels)) {
+       if (empty($levels)) {
           $this->createNotFoundException('Pas de données');
-      }
+       }
        $level = new Level();
        if ($request->getMethod() === 'POST') {
            $level->addUser($this->getUser());
@@ -82,27 +87,144 @@ class InscriptionController extends AbstractController
 
         if ($request->getMethod() === 'POST') {
             $datas = $request->request->all();
-
             foreach ($datas as $data) {
                 $training = new Training();
                 $training->setLabel($data);
                 $training->setLevel($level);
                 $manager->persist($training);
             }
-
-
-
             $manager->flush();
-//            $session->set('level', $level->getLabel());
-//            $session->set('levelId', $level->getId());
 
-            return $this->redirectToRoute("inscription_etudiant");
+            return $this->redirectToRoute("inscription_horaires");
         }
 
         return $this->render('inscription/forms/training/add.html.twig', [
             'user' => $this->getUser(),
             'trainings' => $trainings,
             'levels' => $levels
+        ]);
+    }
+
+    /**
+     * @Route("/horaires", name="horaires", methods={"GET", "POST"})
+     */
+    public function planning(CalendarRepository $calendar, Request $request): Response
+    {
+        $events = $calendar->findBy(['user' => $this->getUser()]);
+        $rdvs = [];
+        foreach ($events as $event) {
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                'title' => $event->getTitle(),
+                'description' => $event->getDescription(),
+                'backgroundColor' => $event->getBackgroundColor(),
+                'borderColor' => $event->getBorderColor(),
+                'textColor' => $event->getTextColor(),
+                'allDay' => $event->getAllDay()
+            ];
+        }
+        $data = json_encode($rdvs);
+        return $this->render('inscription/forms/planning/index.html.twig', compact('data'));
+    }
+
+    /**
+     * @Route("/horaires/new", name="horaires_new", methods={"POST"})
+     */
+    public function newEvents(Request $request, EntityManagerInterface $manager, SessionInterface $session, LevelRepository $levelRepository)
+    {
+       // $session->start();
+       // $level = $levelRepository->find($session->get('levelId'));
+        $calendar = new Calendar();
+        $donnees = json_decode($request->getContent());
+        if (
+            isset($donnees->title) && !empty($donnees->title) &&
+            isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->end) && !empty($donnees->end) &&
+            isset($donnees->backgroundColor) && !empty($donnees->backgroundColor)
+        ) {
+            $calendar->setTitle($donnees->title);
+            $calendar->setStart(new DateTime($donnees->start));
+            $calendar->setEnd(new DateTime($donnees->end));
+            $calendar->setBackgroundColor($donnees->backgroundColor);
+            $calendar->setUser($this->getUser());
+         //   $calendar->setLevel($level);
+            $manager->persist($calendar);
+            $manager->flush();
+
+            return new Response('ok', 200);
+        } else {
+            return new Response('Données incomplètes', 404);
+        }
+    }
+
+    /**
+     * @Route("/horaire/{id}/edit", name="horaire_edit", methods={"PUT"})
+     */
+    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em): Response
+    {
+        $donnees = json_decode($request->getContent());
+        if (
+            isset($donnees->title) && !empty($donnees->title) &&
+            isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->end) && !empty($donnees->end) &&
+            isset($donnees->backgroundColor) && !empty($donnees->backgroundColor)
+        ) {
+            $code = 200;
+            if (!$calendar) {
+                $calendar = new Calendar;
+                $code = 201;
+            }
+            $calendar->setTitle($donnees->title);
+            //   $calendar->setDescription($donnees->description);
+            $calendar->setStart(new DateTime($donnees->start));
+            $calendar->setEnd(new DateTime($donnees->end));
+            $calendar->setBackgroundColor($donnees->backgroundColor);
+            $em->persist($calendar);
+            $em->flush();
+
+            return new Response('ok', $code);
+        } else {
+            return new Response('Données incomplètes', 404);
+        }
+    }
+
+    /**
+     * @Route("/recapitulatif", name="recap")
+     */
+    public function recapitulatif(UsersRepository $repository)
+    {
+     //   $levels = $repository->getLevelsByUsers($this->getUser());
+        $trainings = $repository->getTrainingByLevelsByUsers($this->getUser());
+        $planning = $repository->getPlanningByUser($this->getUser());
+        if (empty($trainings) && empty($planning)) {
+            $this->createNotFoundException('Pas de données');
+        }
+        $datas = [
+            'user' => $this->getUser(),
+            'planning' => $planning
+        ];
+        foreach ($trainings as $training) {
+           $datas['trainings'][$training['level']][] = $training['training'];
+        }
+        if (empty($datas)) {
+            $this->createNotFoundException('Pas de données');
+        }
+
+//        $rdvs = [];
+//        foreach ($planning as $event) {
+//            $rdvs[] = [
+//
+//                'start' => $event['start']->format('Y-m-d H:i:s'),
+//                'end' => $event['end']->format('Y-m-d H:i:s'),
+//            ];
+//        }
+//        $hours = json_encode($rdvs);
+        //dd($data);
+        return $this->render("inscription/recapitulatif.html.twig", [
+            'datas' => $datas,
+           // 'hours' => $hours
         ]);
     }
 }

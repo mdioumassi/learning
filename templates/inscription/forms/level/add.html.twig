@@ -1,91 +1,34 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
-<style>
-    .cc-selector input{
-        margin:0;padding:0;
-        -webkit-appearance:none;
-        -moz-appearance:none;
-        appearance:none;
-    }
-
-    .cc-selector-2 input{
-        position:absolute;
-        z-index:999;
-    }
-
-    .debutant{background-image:url(https://via.placeholder.com/250x150/00b300/404040?text=DEBUTANT);}
-    .avance{background-image:url(https://via.placeholder.com/250x150/00b300/404040?text=AVANCE);}
-    .expert{background-image:url(https://via.placeholder.com/250x150/00b300/404040?text=EXPERT);}
-
-    .cc-selector-2 input:active +.drinkcard-cc, .cc-selector input:active +.drinkcard-cc{opacity: .9;}
-    .cc-selector-2 input:checked +.drinkcard-cc, .cc-selector input:checked +.drinkcard-cc{
-        -webkit-filter: none;
-        -moz-filter: none;
-        filter: none;
-    }
-    .drinkcard-cc{
-        cursor:pointer;
-        background-size:contain;
-        background-repeat:no-repeat;
-        display:inline-block;
-        width:250px;height:150px;
-        -webkit-transition: all 100ms ease-in;
-        -moz-transition: all 100ms ease-in;
-        transition: all 100ms ease-in;
-        -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
-        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
-        filter: brightness(1.8) grayscale(1) opacity(.7);
-    }
-    .drinkcard-cc:hover{
-        -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
-        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
-        filter: brightness(1.2) grayscale(.5) opacity(.9);
-    }
-
-    /* Extras */
-    a:visited{color:#888}
-    a{color:#444;text-decoration:none;}
-    p{margin-bottom:.3em;}
-    * { font-family:monospace; }
-    .cc-selector-2 input{ margin: 5px 0 0 12px; }
-    .cc-selector-2 label{ margin-left: 7px; }
-    span.cc{ color:#6d84b4 }
-</style>
+ {{ parent() }}
+    <link rel="stylesheet" href="/css/externe/style.css">
 {% endblock %}
 {% block body %}
     <div class="separator" style="margin-top: 100px;"></div>
     <div class="w3-container">
         <div class="w3-bar w3-grey">
-            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Etudiant')">ETUDIANT</button>
-            <button class="w3-bar-item w3-button tablink  w3-red" onclick="openCity(event,'Niveau')">NIVEAU</button>
-            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Formation')">FORMATIONS</button>
-        </div>
-
-        <div id="Etudiant" class="w3-container w3-border city"  style="display:none">
-            <table class="table table-bordered w3-margin-top">
-                <tr><th class="w3-indigo">Nom: </th><td>{{ user.firstname }}</td></tr>
-                <tr><th class="w3-indigo">Prénom: </th><td>{{ user.lastname }}</td></tr>
-                <tr><th class="w3-indigo">Email: </th><td>{{ user.email }}</td></tr>
-                <tr><th class="w3-indigo">Téléphone: </th><td>{{ user.phoneMobile }}</td></tr>
-            </table>
-
+            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Etudiant')">Etudiant</button>
+            <button class="w3-bar-item w3-button tablink  w3-red" onclick="openCity(event,'Niveau')">Niveau</button>
+            <button class="w3-bar-item w3-button tablink">Formations</button>
+            <button class="w3-bar-item w3-button tablink">Horaires</button>
+            <button class="w3-bar-item w3-button tablink">Récapitulatif</button>
         </div>
 
         <div id="Niveau" class="w3-container w3-border city">
-            <form class="w3-margin-top" method="post" action="{{ path('inscription_level') }}">
+            <form id="form-level" class="w3-margin-top" method="post" action="{{ path('inscription_level') }}">
                 <div class="cc-selector-2">
                     {% for level in levels %}
-                    <input id="{{ level.label }}" type="radio" name="level" value="{{ level.id }}" />
+                    <input class="w3-radio" id="{{ level.label }}" type="radio" name="level" value="{{ level.id }}" required/>
                     <label class="drinkcard-cc" for="{{ level.label }}">
                         <img src="https://via.placeholder.com/250x150/00b300/404040?text={{ level.id }}" alt="">
                     </label>
                     {% endfor %}
                 </div>
-                <div class="w3-bar w3-margin-bottom">
-                    <a href="{{ path('inscription_etudiant') }}"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
-                    <a href="{{ path('inscription_level') }}"><button type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button></a>
-                </div>
             </form>
+            <div class="w3-bar w3-margin-bottom">
+                <a href="javascript:history.go(-1)"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
+                <button id="enregistrer" type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button>
+            </div>
         </div>
 
         <div id="Tokyo" class="w3-container w3-border city" style="display:none">
@@ -94,4 +37,19 @@
         </div>
     </div>
 
+{% endblock %}
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(function(){
+            {#$("#back").click(function (ev) {#}
+            {#    ev.preventDefault();#}
+            {#    window.location.href = "{{ path('users_profile') }}";#}
+            {#})#}
+            $("#enregistrer").click(function () {
+                $("#form-level").submit();
+            });
+        });
+    </script>
 {% endblock %}

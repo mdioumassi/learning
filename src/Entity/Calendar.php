@@ -62,6 +62,11 @@ class Calendar
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Level::class, inversedBy="calendars")
+     */
+    private $level;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +176,18 @@ class Calendar
     public function setUser(?Users $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getLevel(): ?Level
+    {
+        return $this->level;
+    }
+
+    public function setLevel(?Level $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

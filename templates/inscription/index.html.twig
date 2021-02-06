@@ -8,8 +8,10 @@
     <div class="w3-container">
         <div class="w3-bar w3-grey">
             <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'Etudiant')">Etudiant</button>
-            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Paris')">Paris</button>
-            <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Tokyo')">Tokyo</button>
+            <button class="w3-bar-item w3-button tablink">Niveau</button>
+            <button class="w3-bar-item w3-button tablink">Formations</button>
+            <button class="w3-bar-item w3-button tablink">Horaires</button>
+            <button class="w3-bar-item w3-button tablink">Récapitulatif</button>
         </div>
 
         <div id="Etudiant" class="w3-container w3-border city">
@@ -23,16 +25,6 @@
               <button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
               <a href="{{ path('inscription_level') }}"><button class="w3-button w3-right w3-green">Suivant &raquo;</button></a>
             </div>
-        </div>
-
-        <div id="Paris" class="w3-container w3-border city" style="display:none">
-            <h2>Paris</h2>
-            <p>Paris is the capital of France.</p>
-        </div>
-
-        <div id="Tokyo" class="w3-container w3-border city" style="display:none">
-            <h2>Tokyo</h2>
-            <p>Tokyo is the capital of Japan.</p>
         </div>
     </div>
 

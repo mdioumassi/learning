@@ -64,4 +64,65 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         ;
     }
     */
+    public function getUserTrainingPlanning(?UserInterface $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->select(
+//                'u.civility,
+//                u.firstname,
+//                u.lastname,
+//                u.email,
+//                u.phone_mobile,
+                'l.label as level,
+                t.label as training,
+                c.start,
+                c.end')
+            ->innerJoin('u.levels', 'l')
+            ->innerJoin('u.calendars', 'c')
+            ->innerJoin('l.trainings', 't')
+            ->andWhere('u.id = :val')
+           ->setParameter('val', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function getLevelsByUsers(?UserInterface $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('l.label as level')
+            ->innerJoin('u.levels', 'l')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function getTrainingByLevelsByUsers(?UserInterface $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('t.label as training, l.label as level')
+            ->innerJoin('u.levels', 'l')
+            ->innerJoin('l.trainings', 't')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function getPlanningByUser(?UserInterface $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('distinct(l.label) as level, c.start, c.end')
+            ->innerJoin('u.levels', 'l')
+            ->innerJoin('u.calendars', 'c')
+            ->innerJoin('l.calendars', 'lc')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

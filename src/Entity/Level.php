@@ -34,11 +34,17 @@ class Level
      */
     private $trainings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Calendar::class, mappedBy="level")
+     */
+    private $calendars;
+
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->trainings = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +115,36 @@ class Level
             // set the owning side to null (unless already changed)
             if ($training->getLevels() === $this) {
                 $training->setLevels(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Calendar[]
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): self
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars[] = $calendar;
+            $calendar->setLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): self
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getLevel() === $this) {
+                $calendar->setLevel(null);
             }
         }
 

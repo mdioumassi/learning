@@ -68,4 +68,12 @@ class UsersController extends AbstractController
         }
         return $this->render('users/editpass.html.twig');
     }
+
+    /**
+     * @Route("/dashbord", name="dashbord")
+     */
+    public function dashboard()
+    {
+       return $this->render("users/dashbord.html.twig");
+    }
 }
