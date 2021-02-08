@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Calendar;
 use App\Entity\Level;
 use App\Entity\Training;
+use App\Form\CalendarType;
 use App\Form\LevelType;
 use App\Repository\CalendarRepository;
 use App\Repository\LevelRepository;
@@ -130,33 +131,80 @@ class InscriptionController extends AbstractController
     }
 
     /**
-     * @Route("/horaires/new", name="horaires_new", methods={"POST"})
+     * @Route("/horaires/new", name="horaires_new", methods={"GET", "POST"})
      */
-    public function newEvents(Request $request, EntityManagerInterface $manager, SessionInterface $session, LevelRepository $levelRepository)
+    public function newEvents(
+        ?Calendar $calendar,
+        Request $request,
+        EntityManagerInterface $manager,
+        CalendarRepository $calendarRepository
+    )
     {
        // $session->start();
        // $level = $levelRepository->find($session->get('levelId'));
-        $calendar = new Calendar();
-        $donnees = json_decode($request->getContent());
-        if (
-            isset($donnees->title) && !empty($donnees->title) &&
-            isset($donnees->start) && !empty($donnees->start) &&
-            isset($donnees->end) && !empty($donnees->end) &&
-            isset($donnees->backgroundColor) && !empty($donnees->backgroundColor)
-        ) {
-            $calendar->setTitle($donnees->title);
-            $calendar->setStart(new DateTime($donnees->start));
-            $calendar->setEnd(new DateTime($donnees->end));
-            $calendar->setBackgroundColor($donnees->backgroundColor);
-            $calendar->setUser($this->getUser());
-         //   $calendar->setLevel($level);
-            $manager->persist($calendar);
-            $manager->flush();
-
-            return new Response('ok', 200);
-        } else {
-            return new Response('Données incomplètes', 404);
+      //  $calendar = new Calendar();
+        $events = $calendarRepository->findBy(['user' => $this->getUser()]);
+        $rdvs = [];
+        foreach ($events as $event) {
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                'title' => $event->getTitle(),
+                'description' => $event->getDescription(),
+                'backgroundColor' => $event->getBackgroundColor(),
+                'borderColor' => $event->getBorderColor(),
+                'textColor' => $event->getTextColor(),
+                'allDay' => $event->getAllDay()
+            ];
         }
+        $data = json_encode($rdvs);
+
+      $donnees = json_decode($request->getContent());
+   //  dd($donnees);
+        if ($donnees) {
+            if (
+                isset($donnees->title) && !empty($donnees->title) &&
+                isset($donnees->start) && !empty($donnees->start) &&
+                isset($donnees->end) && !empty($donnees->end) &&
+                isset($donnees->description) && !empty($donnees->description) &&
+                isset($donnees->backgroundColor) && !empty($donnees->backgroundColor) &&
+                isset($donnees->borderColor) && !empty($donnees->borderColor) &&
+                isset($donnees->textColor) && !empty($donnees->textColor)
+            ) {
+                $code = 200;
+                if (!$calendar) {
+                    $calendar = new Calendar;
+
+                    $code = 201;
+                }
+                $calendar->setTitle($donnees->title);
+                $calendar->setDescription($donnees->description);
+                $calendar->setStart(new DateTime($donnees->start));
+                $calendar->setEnd(new DateTime($donnees->end));
+//                if ($donnees->allDay) {
+//                    $calendar->setEnd(new DateTime($donnees->end));
+//                }
+//                $calendar->setAllDay($donnees->allDay);
+                $calendar->setBackgroundColor($donnees->backgroundColor);
+                $calendar->setBorderColor($donnees->borderColor);
+                $calendar->setTextColor($donnees->textColor);
+                $calendar->setUser($this->getUser());
+
+                $manager->persist($calendar);
+                $manager->flush();
+
+                return new Response('ok', $code);
+            } else {
+                return new Response('Données incomplètes', 404);
+            }
+        }
+        $form = $this->createForm(CalendarType::class, $calendar);
+
+        return $this->render('inscription/forms/planning/index.html.twig', [
+            'form' => $form->createView(),
+            'data' => $data
+        ]);
     }
 
     /**

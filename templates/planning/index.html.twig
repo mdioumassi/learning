@@ -105,7 +105,7 @@
 		const xhr = new XMLHttpRequest
 		xhr.open("PUT", url)
 		xhr.send(JSON.stringify(donnees))
-		window.location.href = "https://127.0.0.1:8000/planning"
+		window.location.href = "{{ path('inscription_horaires') }}"
 	})
 	//Selection d'un nouveau event
 	calendar.on('select', (e) => {
