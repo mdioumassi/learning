@@ -161,13 +161,13 @@ class InscriptionController extends AbstractController
         $data = json_encode($rdvs);
 
       $donnees = json_decode($request->getContent());
-   //  dd($donnees);
+     //dd($donnees);
         if ($donnees) {
             if (
                 isset($donnees->title) && !empty($donnees->title) &&
                 isset($donnees->start) && !empty($donnees->start) &&
                 isset($donnees->end) && !empty($donnees->end) &&
-                isset($donnees->description) && !empty($donnees->description) &&
+               // isset($donnees->description) && !empty($donnees->description) &&
                 isset($donnees->backgroundColor) && !empty($donnees->backgroundColor) &&
                 isset($donnees->borderColor) && !empty($donnees->borderColor) &&
                 isset($donnees->textColor) && !empty($donnees->textColor)
@@ -213,25 +213,21 @@ class InscriptionController extends AbstractController
     public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em): Response
     {
         $donnees = json_decode($request->getContent());
-        if (
-            isset($donnees->title) && !empty($donnees->title) &&
-            isset($donnees->start) && !empty($donnees->start) &&
-            isset($donnees->end) && !empty($donnees->end) &&
-            isset($donnees->backgroundColor) && !empty($donnees->backgroundColor)
-        ) {
+        if ($donnees) {
             $code = 200;
             if (!$calendar) {
                 $calendar = new Calendar;
                 $code = 201;
             }
             $calendar->setTitle($donnees->title);
-            //   $calendar->setDescription($donnees->description);
-            $calendar->setStart(new DateTime($donnees->start));
-            $calendar->setEnd(new DateTime($donnees->end));
+            $calendar->setDescription($donnees->description);
+//            $calendar->setStart(new DateTime($donnees->start));
+//            $calendar->setEnd(new DateTime($donnees->end));
             $calendar->setBackgroundColor($donnees->backgroundColor);
+            $calendar->setTextColor($donnees->textColor);
+            $calendar->setBorderColor($donnees->borderColor);
             $em->persist($calendar);
             $em->flush();
-
             return new Response('ok', $code);
         } else {
             return new Response('Données incomplètes', 404);

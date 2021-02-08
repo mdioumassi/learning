@@ -51,9 +51,11 @@
 						<div class="row">
 							<div class="col">
 								{{ form_row(form.start) }}
+								<input type="hidden" class="start_hidden">
 							</div>
 							<div class="col">
 								{{ form_row(form.end) }}
+								<input type="hidden" class="end_hidden">
 							</div>
 						</div>
 						<div class="row">
@@ -143,31 +145,30 @@
 		$("#create-event").modal("show");
 		$(".modal-title").text('Créer');
 		$("#changeButton").addClass('btn-primary ajouter').text('Ajouter')
-
-		$("#event_date_range").val(moment(e.start).format("YYYY-MM-DD HH:mm") + ' - ' + moment(e.end).format("YYYY-MM-DD HH:mm"));
-		$("#calendar_start").val(moment(e.start).format("YYYY-MM-DD HH:mm"));
-		$("#calendar_end").val(moment(e.end).format("YYYY-MM-DD HH:mm"));
-		// $(".start_hidden").val(moment(e.start).format("YYYY-MM-DD HH:mm"));
-		// $(".end_hidden").val(moment(e.end).format("YYYY-MM-DD HH:mm"));
+		$("#calendar_start").val(moment(e.start).format("DD-MM-YYYY HH:mm"));
+		$("#calendar_end").val(moment(e.end).format("DD-MM-YYYYY HH:mm"));
+		$(".start_hidden").val(moment(e.start).format("YYYY-MM-DD HH:mm"));
+		$(".end_hidden").val(moment(e.end).format("YYYY-MM-DD HH:mm"));
 		$('.ajouter').click(function (){
-			$('#form_create_event').submit(function (event) {
-				event.preventDefault();
+			// $('#form_create_event').submit(function (event) {
+			// 	event.preventDefault();
 				const url = "{{ path('inscription_horaires_new') }}";
 				const donnees = {
 					"title": $('#calendar_title').val(),
-					"start": $("#calendar_start").val(),
-					"end":  $("#calendar_end").val(),
+					"start": $(".start_hidden").val(),
+					"end":  $(".end_hidden").val(),
 					"description": $('#calendar_description').val(),
 					// "allDay": $('#calendar_all_day').val(),
 					"backgroundColor": $('#calendar_background_color').val(),
 					"borderColor": $('#calendar_border_color').val(),
 					"textColor": $('#calendar_text_color').val()
 				}
+				console.log(donnees)
 				const xhr = new XMLHttpRequest
 				xhr.open("POST", url)
 				xhr.send(JSON.stringify(donnees))
 				window.location.href = "{{ path('inscription_horaires_new') }}"
-			})
+			// })
 		})
 	})
 	//Modification d'un événement
@@ -182,21 +183,20 @@
 		 $('#calendar_background_color').val(event.event.backgroundColor)
 		 $('#calendar_text_color').val(event.event.textColor)
 		 $('#calendar_border_color').val(event.event.borderColor)
-		// $("#event_date_range").val(moment(event.event.start).format("YYYY-MM-DD HH:mm") + ' - ' + moment(event.event.end).format("YYYY-MM-DD HH:mm"));
-		$("#calendar_start").val(moment(event.event.start).format("YYYY-MM-DD HH:mm"));
-		$("#calendar_end").val(moment(event.event.end).format("YYYY-MM-DD HH:mm"));
+		 $("#calendar_start").val(moment(event.event.start).format("DD-MM-YYYY HH:mm"));
+		 $("#calendar_end").val(moment(event.event.end).format("DD-MM-YYYY HH:mm"));
 
 		// $(".start_hidden").val(moment(event.event.start).format("YYYY-MM-DD HH:mm"));
 		// $(".end_hidden").val(moment(event.event.end).format("YYYY-MM-DD HH:mm"));
 		$('.modifier').click(function (){
-			$('form').submit(function (e) {
-				e.preventDefault();
+			// $('form').submit(function (e) {
+			// 	e.preventDefault();
 			{#//	const url = {{ path('inscription_horaire_edit', {'id': event.event.id}) }}#}
 				const url = `/inscription/horaire/${event.event.id}/edit`
 				const donnees = {
 					"title": $('#calendar_title').val(),
-					"start": $("#calendar_start").val(),
-					"end":  $("#calendar_end").val(),
+					// "start": $("#calendar_start").val(),
+					// "end":  $("#calendar_end").val(),
 					"description": $('#calendar_description').val(),
 					// "allDay": $('#calendar_all_day').val(),
 					"backgroundColor": $('#calendar_background_color').val(),
@@ -206,8 +206,8 @@
 				const xhr = new XMLHttpRequest
 				xhr.open("PUT", url)
 				xhr.send(JSON.stringify(donnees))
-				window.location.href = "{{ path('inscription_horaires_new') }}"
-			})
+				{#window.location.href = "{{ path('inscription_horaires_new') }}"#}
+			// })
 		})
 	})
 	calendar.render();
