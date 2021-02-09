@@ -26,11 +26,17 @@
 
         <div id="Récapitulatif" class="w3-container w3-border city">
             <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
-                <legend class="w3-border w3-grey" style="width: 300px">Etudiant</legend>
-                <input class="form-control form-control-sm" type="text" value="{{ datas['user'].firstname  }}" disabled>
-                <input class="form-control form-control-sm" type="text" value="{{ datas['user'].lastname  }}" disabled>
-                <input class="form-control form-control-sm" type="text" value="{{ datas['user'].email  }}" disabled>
-                <input class="form-control form-control-sm" type="text" value="{{ datas['user'].phoneMobile  }}" disabled>
+                <legend class="w3-border w3-green w3-padding-small" style="width: 10%">Etudiant</legend>
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control form-control-sm" type="text" value="{{ datas['user'].firstname  }}" disabled>
+                        <input class="form-control form-control-sm" type="text" value="{{ datas['user'].email  }}" disabled>
+                    </div>
+                    <div class="col">
+                        <input class="form-control form-control-sm" type="text" value="{{ datas['user'].lastname  }}" disabled>
+                        <input class="form-control form-control-sm" type="text" value="{{ datas['user'].phoneMobile  }}" disabled>
+                    </div>
+                </div>
             </fieldset>
 
 {#            <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">#}
@@ -41,7 +47,7 @@
 {#            </fieldset>#}
 
             <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
-                <legend class="w3-border w3-green w3-grey">Formation</legend>
+                <legend class="w3-border w3-green w3-green w3-padding-small" style="width: 10%">Formation</legend>
                 <div class="row">
                     {% if datas['trainings'] is defined  %}
                         {% for key, trainings in datas['trainings'] %}
@@ -76,11 +82,12 @@
             </fieldset>
 
             <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
-                <legend class="w3-border w3-green w3-grey">Planning</legend>
+                <legend class="w3-border w3-green w3-padding-small" style="width: 10%">Planning</legend>
                 <div class="row">
+{#                    {{ dump(datas['planning']) }}#}
                     {% for plan in datas['planning'] %}
                         <div class="col">
-                            <h3>{{ plan['level'] }}</h3>
+                            <h4>{{ plan['level'] }}<span class="w3-badge">{{ plan['diff'] }}</span></h4>
                             <div id="calendrier"></div>
                            <input class="form-control form-control-sm" type="text" value="{{ plan['start'] | date('d/m/Y h:i:s') }}" disabled>
                             <input class="form-control form-control-sm" type="text" value="{{ plan['end'] | date('d/m/Y h:i:s')  }}" disabled>

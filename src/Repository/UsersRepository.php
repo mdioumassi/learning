@@ -118,7 +118,7 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
             ->select('distinct(l.label) as level, c.start, c.end')
             ->innerJoin('u.levels', 'l')
             ->innerJoin('u.calendars', 'c')
-            ->innerJoin('l.calendars', 'lc')
+        //    ->innerJoin('l.calendars', 'lc')
             ->andWhere('u.id = :val')
             ->setParameter('val', $user)
             ->getQuery()

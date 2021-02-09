@@ -3,7 +3,7 @@
     width: 0;
     position: fixed;
     z-index: 1;
-    top: 77px;
+    top: 79px;
     left: 1px;
     background-color: #111;
     overflow-x: hidden;
@@ -36,6 +36,7 @@
      position: fixed;
     transition: margin-left .5s;
     /*padding: 16px;*/
+      padding-top: 16px;
   }
   
   @media screen and (max-height: 450px) {

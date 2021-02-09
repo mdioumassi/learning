@@ -96,7 +96,7 @@ class InscriptionController extends AbstractController
             }
             $manager->flush();
 
-            return $this->redirectToRoute("inscription_horaires");
+            return $this->redirectToRoute("inscription_horaires_new");
         }
 
         return $this->render('inscription/forms/training/add.html.twig', [
@@ -261,6 +261,7 @@ class InscriptionController extends AbstractController
             'user' => $this->getUser(),
             'planning' => $planning
         ];
+
         foreach ($trainings as $training) {
            $datas['trainings'][$training['level']][] = $training['training'];
         }
@@ -268,19 +269,22 @@ class InscriptionController extends AbstractController
             $this->createNotFoundException('Pas de données');
         }
 
-//        $rdvs = [];
-//        foreach ($planning as $event) {
-//            $rdvs[] = [
-//
-//                'start' => $event['start']->format('Y-m-d H:i:s'),
-//                'end' => $event['end']->format('Y-m-d H:i:s'),
-//            ];
-//        }
-//        $hours = json_encode($rdvs);
-        //dd($data);
+        foreach ($datas['planning'] as $key => $data){
+            $start = $data['start']->format('H:i:s');
+            $end =  $data['end']->format('H:i:s');
+            $datas['planning'][$key]['diff']  =  $this->getNumbersHours($start, $end);
+        }
+//echo '<pre>';print_r($datas['planning']);echo '</pre>';
         return $this->render("inscription/recapitulatif.html.twig", [
             'datas' => $datas,
            // 'hours' => $hours
         ]);
+    }
+
+    public function getNumbersHours($start, $end)
+    {
+        $h1 = strtotime($start);
+        $h2 = strtotime($end);
+       return gmdate("H:i", $h2-$h1);
     }
 }
