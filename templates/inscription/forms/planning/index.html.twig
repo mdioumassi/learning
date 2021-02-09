@@ -168,7 +168,7 @@
 				xhr.open("POST", url)
 				xhr.send(JSON.stringify(donnees))
 				window.location.href = "{{ path('inscription_horaires_new') }}"
-			// })
+			//})
 		})
 	})
 	//Modification d'un événement
@@ -185,20 +185,11 @@
 		 $('#calendar_border_color').val(event.event.borderColor)
 		 $("#calendar_start").val(moment(event.event.start).format("DD-MM-YYYY HH:mm"));
 		 $("#calendar_end").val(moment(event.event.end).format("DD-MM-YYYY HH:mm"));
-
-		// $(".start_hidden").val(moment(event.event.start).format("YYYY-MM-DD HH:mm"));
-		// $(".end_hidden").val(moment(event.event.end).format("YYYY-MM-DD HH:mm"));
-		$('.modifier').click(function (){
-			// $('form').submit(function (e) {
-			// 	e.preventDefault();
-			{#//	const url = {{ path('inscription_horaire_edit', {'id': event.event.id}) }}#}
+		 $('.modifier').click(function (){
 				const url = `/inscription/horaire/${event.event.id}/edit`
 				const donnees = {
 					"title": $('#calendar_title').val(),
-					// "start": $("#calendar_start").val(),
-					// "end":  $("#calendar_end").val(),
 					"description": $('#calendar_description').val(),
-					// "allDay": $('#calendar_all_day').val(),
 					"backgroundColor": $('#calendar_background_color').val(),
 					"borderColor": $('#calendar_border_color').val(),
 					"textColor": $('#calendar_text_color').val()
@@ -206,9 +197,15 @@
 				const xhr = new XMLHttpRequest
 				xhr.open("PUT", url)
 				xhr.send(JSON.stringify(donnees))
-				{#window.location.href = "{{ path('inscription_horaires_new') }}"#}
-			// })
-		})
+				window.location.href = "{{ path('inscription_horaires_new') }}"
+		 })
+		 $('#delete').click(function (){
+			 const url = `/inscription/horaire/${event.event.id}/delete`
+			const xhr = new XMLHttpRequest
+			xhr.open("GET", url)
+			xhr.send()
+			window.location.href = "{{ path('inscription_horaires_new') }}"
+		 });
 	})
 	calendar.render();
 }

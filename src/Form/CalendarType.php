@@ -59,11 +59,6 @@ class CalendarType extends AbstractType
             ->add('background_color', ColorType::class)
             ->add('border_color', ColorType::class)
             ->add('text_color', ColorType::class);
-//            ->add('ajouter', SubmitType::class, [
-//                'attr' => [
-//                    'class' => 'btn btn-primary'
-//                ]
-//            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

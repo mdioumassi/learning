@@ -235,6 +235,18 @@ class InscriptionController extends AbstractController
     }
 
     /**
+     * @Route("/horaire/{id}/delete", name="horaire_delete", methods={"GET"})
+     */
+    public function deleteEvent($id, CalendarRepository $calendarRepository, EntityManagerInterface $manager)
+    {
+        $event = $calendarRepository->find($id);
+        if ($event) {
+            $manager->remove($event);
+            $manager->flush();
+        }
+
+    }
+    /**
      * @Route("/recapitulatif", name="recap")
      */
     public function recapitulatif(UsersRepository $repository)
