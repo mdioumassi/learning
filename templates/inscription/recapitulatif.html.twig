@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'users.html.twig' %}
 
 {% block title %}Inscription!{% endblock %}
 
@@ -19,14 +19,14 @@
         <div class="w3-bar w3-grey">
             <button class="w3-bar-item w3-button tablink">Etudiant</button>
             <button class="w3-bar-item w3-button tablink">Niveau</button>
-            <button class="w3-bar-item w3-button tablink">Formations</button>
+            <a href="{{ path('users_level') }}"><button class="w3-bar-item w3-button tablink">Formations</button></a>
             <button class="w3-bar-item w3-button tablink">Horaires</button>
             <button class="w3-bar-item w3-button tablink  w3-red">Récapitulatif</button>
         </div>
 
         <div id="Récapitulatif" class="w3-container w3-border city">
             <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
-                <legend class="w3-border w3-green w3-padding-small" style="width: 10%">Etudiant</legend>
+                <legend class="w3-border w3-green w3-padding-small" style="width: 20%">Etudiant</legend>
                 <div class="row">
                     <div class="col">
                         <input class="form-control form-control-sm" type="text" value="{{ datas['user'].firstname  }}" disabled>
@@ -47,7 +47,7 @@
 {#            </fieldset>#}
 
             <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
-                <legend class="w3-border w3-green w3-green w3-padding-small" style="width: 10%">Formation</legend>
+                <legend class="w3-border w3-green w3-green w3-padding-small" style="width: 20%">Formation</legend>
                 <div class="row">
                     {% if datas['trainings'] is defined  %}
                         {% for key, trainings in datas['trainings'] %}
@@ -82,18 +82,25 @@
             </fieldset>
 
             <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
-                <legend class="w3-border w3-green w3-padding-small" style="width: 10%">Planning</legend>
-                <div class="row">
-{#                    {{ dump(datas['planning']) }}#}
-                    {% for plan in datas['planning'] %}
-                        <div class="col">
-                            <h4>{{ plan['level'] }}<span class="w3-badge">{{ plan['diff'] }}</span></h4>
-                            <div id="calendrier"></div>
-                           <input class="form-control form-control-sm" type="text" value="{{ plan['start'] | date('d/m/Y h:i:s') }}" disabled>
-                            <input class="form-control form-control-sm" type="text" value="{{ plan['end'] | date('d/m/Y h:i:s')  }}" disabled>
-                        </div>
-                    {% endfor %}
+                <legend class="w3-border w3-green w3-padding-small" style="width: 20%">Planning</legend>
+                <div id="calendrier">
+{#                    <div id="calendrier"></div>#}
                 </div>
+{#                <div class="plane">#}
+{#                <div id="calendrier"></div>#}
+{#                </div>#}
+{#
+{#                <div class="row">#}
+{#                    {{ dump(datas['planning']) }}#}
+{#                    {% for plan in datas['planning'] %}#}
+{#                        <div class="col">#}
+{#                            <h4>{{ plan['level'] }}<span class="w3-badge">{{ plan['diff'] }}</span></h4>#}
+{#                            <div id="calendrier"></div>#}
+{#                           <input class="form-control form-control-sm" type="text" value="{{ plan['start'] | date('d/m/Y h:i:s') }}" disabled>#}
+{#                            <input class="form-control form-control-sm" type="text" value="{{ plan['end'] | date('d/m/Y h:i:s')  }}" disabled>#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#                </div>#}
             </fieldset>
             <div class="w3-bar w3-margin-bottom">
                 <a href="javascript:history.go(-1)"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
@@ -110,34 +117,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{#<script>#}
-{#    window.onload = () => {#}
-{#        const calendarElt = document.querySelector("#calendrier");#}
-{#        const calendar = new FullCalendar.Calendar(calendarElt, {#}
-{#            initialView: 'timeGridWeek',#}
-{#            locale: 'fr',#}
-{#            allDay: false,#}
-{#            headerToolbar: {#}
-{#                start: 'prev,next today',#}
-{#                center: 'title',#}
-{#                end: 'dayGridMonth, timeGridWeek, list'#}
-{#            },#}
-{#            selectable: true,#}
-{#            editable: true,#}
+<script>
+    window.onload = () => {
+        const calendarElt = document.querySelector("#calendrier");
+        const calendar = new FullCalendar.Calendar(calendarElt, {
+            initialView: 'timeGridWeek',
+            locale: 'fr',
+            allDay: false,
+            headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'dayGridMonth, timeGridWeek, list'
+            },
+            selectable: true,
+            editable: true,
 
-{#            buttonText: {#}
-{#                today: 'Aujourd\'hui',#}
-{#                month: 'Mois',#}
-{#                week: 'Semaine',#}
-{#                list: 'Liste'#}
-{#            },#}
+            buttonText: {
+                today: 'Aujourd\'hui',
+                month: 'Mois',
+                week: 'Semaine',
+                list: 'Liste'
+            },
 
-{#            timeZone: 'Europe/Paris',#}
-{#           events: {{ hours|raw }},#}
-{#            nowIndicator: true,#}
-{#            eventResizableFromStart: true#}
-{#        })#}
-{#        calendar.render();#}
-{#    }#}
-{#</script>#}
+            timeZone: 'Europe/Paris',
+            events: {{ hours|raw }},
+            nowIndicator: true,
+            eventResizableFromStart: true
+        })
+        calendar.render();
+    }
+</script>
 {% endblock %}

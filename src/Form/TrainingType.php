@@ -13,7 +13,7 @@ class TrainingType extends AbstractType
     {
         $builder
             ->add('label')
-            ->add('level')
+           // ->add('level')
         ;
     }
 

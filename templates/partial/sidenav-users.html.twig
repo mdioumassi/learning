@@ -1,5 +1,59 @@
+{% block stylsheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .w3-button{
+            width: 100%;
+            text-align: left !important;
+        }
+    </style>
+{% endblock %}
 <div id="mySidenav" class="sidenav w3-indigo">
 {#    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>#}
     <a href="#">Accueil</a>
     <a href="{{ path('users_profile') }}">Mon profil</a>
+
+    <a href="#">Link 1</a>
+    <div class="w3-bar-item w3-button"  onclick="myAccFunc()">Mes cours <i class="fa fa-caret-down"></i></div>
+    <div id="demoAcc" class="w3-hide">
+        <a class="w3-button" href="{{ path('inscription_recap') }}">Mon inscription</a>
+        <a class="w3-bar-item w3-button" href="{{ path('users_level') }}">Mes formations</a>
+        <a class="w3-bar-item w3-button" href="{{ path('users_planning') }}">Mon planning</a>
+        <a class="w3-bar-item w3-button" href="#">Link</a>
+    </div>
+
+{#    <div class="w3-bar-item w3-button" onclick="myDropFunc()">#}
+{#        Dropdown <i class="fa fa-caret-down"></i>#}
+{#    </div>#}
+{#    <div id="demoDrop" class="w3-dropdown-content w3-white w3-card-4">#}
+{#        <a href="#" class="w3-bar-item w3-button">Link</a>#}
+{#        <a href="#" class="w3-bar-item w3-button">Link</a>#}
+{#    </div>#}
 </div>
+
+{% block javascripts %}
+    <script>
+        function myAccFunc() {
+            var x = document.getElementById("demoAcc");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+
+        function myDropFunc() {
+            var x = document.getElementById("demoDrop");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+    </script>
+{% endblock %}

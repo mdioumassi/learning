@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Users;
 
-use App\Entity\Users;
 use App\Form\EditProfileType;
-use Doctrine\ORM\EntityManager;
+use App\Repository\CalendarRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,5 +74,41 @@ class UsersController extends AbstractController
     public function dashboard()
     {
        return $this->render("users/dashbord.html.twig");
+    }
+
+    /**
+     * @Route("/user/planning", name="planning")
+     * @param CalendarRepository $calendarRepository
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function planning(CalendarRepository $calendarRepository)
+    {
+        $events = $calendarRepository->findBy(['user' => $this->getUser()]);
+        $rdvs = [];
+        foreach ($events as $event) {
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                'title' => $event->getTitle(),
+                'description' => $event->getDescription(),
+                'backgroundColor' => $event->getBackgroundColor(),
+                'borderColor' => $event->getBorderColor(),
+                'textColor' => $event->getTextColor(),
+                'allDay' => $event->getAllDay()
+            ];
+        }
+        $data = json_encode($rdvs);
+        return $this->render("users/planning.html.twig", [
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * @Route("/user/formation", name="planning")
+     */
+    public function formation()
+    {
+
     }
 }

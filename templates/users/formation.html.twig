@@ -1,0 +1,48 @@
+{% extends 'users.html.twig' %}
+
+{% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    <div class="w3-container">
+        <div class="w3-bar w3-grey">
+            <button class="w3-bar-item w3-button tablink">Etudiant</button>
+            <button class="w3-bar-item w3-button tablink">Niveau</button>
+            <button class="w3-bar-item w3-button tablink">Formations</button>
+            <button class="w3-bar-item w3-button tablink">Horaires</button>
+            <button class="w3-bar-item w3-button tablink  w3-red">Récapitulatif</button>
+        </div>
+        <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
+            <legend class="w3-border w3-green w3-green w3-padding-small" style="width: 20%">Formation</legend>
+            <div class="row">
+                {% if datas['trainings'] is defined  %}
+                    {% for key, trainings in datas['trainings'] %}
+                        {% if key == 'DEBUTANT' %}
+                            <div class="col">
+                                <h2>DEBUTANT</h2>
+                                {% for training in trainings %}
+                                    <input class="form-control form-control-sm" type="text" value="{{ training }}" disabled>
+                                {% endfor %}
+                            </div>
+                        {% elseif key =='AVANCE' %}
+                            <div class="col">
+                                <h2>AVANCE</h2>
+                                {% for training in trainings %}
+                                    <input class="form-control form-control-sm" type="text" value="{{ training }}" disabled>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <h2>EXPERT</h2>
+                                {% for training in trainings %}
+                                    <input class="form-control form-control-sm" type="text" value="{{ training }}" disabled>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Pas de données</p>
+                {% endif %}
+            </div>
+        </fieldset>
+    </div>
+
+{% endblock %}

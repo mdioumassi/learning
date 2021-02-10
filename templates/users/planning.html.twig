@@ -1,0 +1,56 @@
+{% extends 'users.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+    <style>
+        #calendrier {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    <div id="calendrier">
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.js" integrity="sha256-rPPF6R+AH/Gilj2aC00ZAuB2EKmnEjXlEWx5MkAp7bw=" crossorigin="anonymous"></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        window.onload = () => {
+            const calendarElt = document.querySelector("#calendrier");
+            const calendar = new FullCalendar.Calendar(calendarElt, {
+                initialView: 'timeGridWeek',
+                locale: 'fr',
+                allDay: false,
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: 'dayGridMonth, timeGridWeek, list'
+                },
+                selectable: true,
+                editable: true,
+
+                buttonText: {
+                    today: 'Aujourd\'hui',
+                    month: 'Mois',
+                    week: 'Semaine',
+                    list: 'Liste'
+                },
+
+                timeZone: 'Europe/Paris',
+                events: {{ data|raw }},
+                nowIndicator: true,
+                eventResizableFromStart: true
+            })
+            calendar.render();
+        }
+    </script>
+{% endblock %}
+
+

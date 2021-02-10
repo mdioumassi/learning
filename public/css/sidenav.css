@@ -14,7 +14,7 @@
   .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 18px;
+    /*font-size: 18px;*/
     color: #fff;
     display: block;
     transition: 0.3s;
@@ -37,6 +37,7 @@
     transition: margin-left .5s;
     /*padding: 16px;*/
       padding-top: 16px;
+      z-index: 1000;
   }
   
   @media screen and (max-height: 450px) {

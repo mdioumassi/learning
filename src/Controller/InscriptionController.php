@@ -95,8 +95,6 @@ class InscriptionController extends AbstractController
                 $manager->persist($training);
             }
             $manager->flush();
-
-            return $this->redirectToRoute("inscription_horaires_new");
         }
 
         return $this->render('inscription/forms/training/add.html.twig', [
@@ -106,12 +104,10 @@ class InscriptionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/horaires", name="horaires", methods={"GET", "POST"})
-     */
-    public function planning(CalendarRepository $calendar, Request $request): Response
+
+    public function planning(CalendarRepository $calendarRepository)
     {
-        $events = $calendar->findBy(['user' => $this->getUser()]);
+        $events = $calendarRepository->findBy(['user' => $this->getUser()]);
         $rdvs = [];
         foreach ($events as $event) {
             $rdvs[] = [
@@ -127,7 +123,8 @@ class InscriptionController extends AbstractController
             ];
         }
         $data = json_encode($rdvs);
-        return $this->render('inscription/forms/planning/index.html.twig', compact('data'));
+        return  $data;
+        //return $this->render('inscription/forms/planning/index.html.twig', compact('data'));
     }
 
     /**
@@ -244,12 +241,11 @@ class InscriptionController extends AbstractController
             $manager->remove($event);
             $manager->flush();
         }
-
     }
     /**
      * @Route("/recapitulatif", name="recap")
      */
-    public function recapitulatif(UsersRepository $repository)
+    public function recapitulatif(UsersRepository $repository, CalendarRepository $calendarRepository)
     {
      //   $levels = $repository->getLevelsByUsers($this->getUser());
         $trainings = $repository->getTrainingByLevelsByUsers($this->getUser());
@@ -277,7 +273,7 @@ class InscriptionController extends AbstractController
 //echo '<pre>';print_r($datas['planning']);echo '</pre>';
         return $this->render("inscription/recapitulatif.html.twig", [
             'datas' => $datas,
-           // 'hours' => $hours
+            'hours' => $this->planning($calendarRepository)
         ]);
     }
 
