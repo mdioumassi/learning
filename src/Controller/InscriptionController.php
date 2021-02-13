@@ -95,6 +95,8 @@ class InscriptionController extends AbstractController
                 $manager->persist($training);
             }
             $manager->flush();
+
+            return $this->redirectToRoute('inscription_horaires_new');
         }
 
         return $this->render('inscription/forms/training/add.html.twig', [
@@ -158,7 +160,6 @@ class InscriptionController extends AbstractController
         $data = json_encode($rdvs);
 
       $donnees = json_decode($request->getContent());
-     //dd($donnees);
         if ($donnees) {
             if (
                 isset($donnees->title) && !empty($donnees->title) &&
@@ -255,22 +256,45 @@ class InscriptionController extends AbstractController
         }
         $datas = [
             'user' => $this->getUser(),
-            'planning' => $planning
+            'planning' => $planning,
+            'trainings' => []
         ];
-
+//        array:6 [▼
+//          "levelId" => 84
+//          "trainingId" => 94
+//          "label" => null
+//          "label_avance" => null
+//          "label_expert" => null
+//          "level" => "DEBUTANT"
+//        ]
         foreach ($trainings as $training) {
-           $datas['trainings'][$training['level']][] = $training['training'];
+//            dd($training);
+//            $datas['trainings'][$training['levelId']][$training['level']][$training['trainingId']] = $training['label'];
+          // $datas['trainings'][$training['level']][] = $training['training'];
+            if ($training['label'] != null) {
+                $datas['trainings'][$training['level']][] = $training['label'];
+               // $datas['trainings'][$training['levelId']][$training['level']][$training['trainingId']] = $training['label'];
+            }
+            if ($training['label_avance'] != null) {
+                $datas['trainings'][$training['level']][] = $training['label_avance'];
+              //  $datas['trainings'][$training['levelId']][$training['level']][$training['trainingId']] = $training['label_avance'];
+            }
+            if ($training['label_expert'] != null) {
+                $datas['trainings'][$training['level']][] = $training['label_expert'];
+                //$datas['trainings'][$training['levelId']][$training['level']][$training['trainingId']] = $training['label_expert'];
+            }
         }
         if (empty($datas)) {
             $this->createNotFoundException('Pas de données');
         }
-
-        foreach ($datas['planning'] as $key => $data){
-            $start = $data['start']->format('H:i:s');
-            $end =  $data['end']->format('H:i:s');
-            $datas['planning'][$key]['diff']  =  $this->getNumbersHours($start, $end);
-        }
-//echo '<pre>';print_r($datas['planning']);echo '</pre>';
+//
+//        foreach ($datas['planning'] as $key => $data){
+//            $start = $data['start']->format('H:i:s');
+//            $end =  $data['end']->format('H:i:s');
+//            $datas['planning'][$key]['diff']  =  $this->getNumbersHours($start, $end);
+//        }
+       // dd($datas);
+//echo '<pre>';print_r($datas);echo '</pre>'; die;
         return $this->render("inscription/recapitulatif.html.twig", [
             'datas' => $datas,
             'hours' => $this->planning($calendarRepository)

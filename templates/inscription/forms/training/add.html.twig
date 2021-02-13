@@ -17,7 +17,7 @@
             <form id="form-training" class="w3-container w3-margin-top" method="post" action="{{ path('inscription_level_training') }}">
                 <div class="cc-selector-2">
                     {% for training in trainings %}
-                        <input class="w3-check"  id="{{ training.label }}" type="checkbox" name="{{ training.id }}" value="{{ training.id }}" required />
+                        <input class="w3-check"  id="{{ training.label }}" type="checkbox" name="{{ training.id }}" value="{{ training.id }}" required  checked/>
                         <label class="drinkcard-cc" for="{{ training.label }}">
                             <img  class="w3-card"  src="https://via.placeholder.com/250x150/00b300/404040?text={{ training.label|upper }}" alt="">
                         </label>

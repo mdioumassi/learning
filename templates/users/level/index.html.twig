@@ -1,0 +1,215 @@
+{% extends 'users.html.twig' %}
+{% block stylesheets %}
+    <style>
+        .btn-delete{
+            color: red;
+            /*float: right;*/
+            /*margin-top: -23px;*/
+            /*margin-right: -17px;*/
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="separator" style="margin-top: 100px;"></div>
+    <div class="w3-container">
+        <div class="w3-bar w3-grey">
+            <button class="w3-bar-item w3-button tablink">Etudiant</button>
+            <button class="w3-bar-item w3-button tablink">Niveau</button>
+            <button class="w3-bar-item w3-button tablink w3-red">Formations</button>
+            <button class="w3-bar-item w3-button tablink">Horaires</button>
+            <a href="{{ path('inscription_recap') }}"><button class="w3-bar-item w3-button tablink ">Récapitulatif</button></a>
+        </div>
+        <fieldset class="w3-border w3-margin-top w3-margin-bottom" style="padding-top:10px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px">
+            <legend class="w3-border w3-green w3-green w3-padding-small" style="width: 20%">Formation</legend>
+            <div class="row">
+                {% if datas['trainings'] is defined  %}
+                   {% for levelId, trainings in datas['trainings'] %}
+                      {% for key, training in trainings %}
+                        {% if key == 'DEBUTANT' %}
+                            <div class="col">
+                                <h3>DEBUTANT <button type="button" class="btn btn-success" data-toggle="modal" data-target="#debutant" data-id="{{ levelId }}">
+                                        <i class="fa fa-plus-circle" style="font-size:20px"></i></button>
+                                </h3>
+                                {% for key, value in training %}
+                                    <label for="">
+                                    <input class="form-control form-control-sm" type="text" value="{{ value }}" disabled>
+                                        <a href="{{ path('users_training_delete', {'id': key}) }}"><i class="fa fa-minus-square btn-delete"></i></a>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% elseif key =='AVANCE' %}
+                            <div class="col">
+                                <h3>AVANCE <button type="button" class="btn btn-success" data-toggle="modal" data-target="#avance" data-id="{{ levelId }}"><i class="fa fa-plus-circle" style="font-size:20px"></i></button></h3>
+                                {% for key, value in training %}
+                                    <label for="">
+                                    <input class="form-control form-control-sm" type="text" value="{{ value }}" disabled>
+                                        <a href="{{ path('users_training_delete', {'id': key}) }}"><i class="fa fa-minus-square btn-delete"></i></a>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <h3>EXPERT <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#expert" data-id="{{ levelId }}"><i class="fa fa-plus-circle" style="font-size:24px"></i></button></h3>
+                                {% for key, value in training %}
+                                    <label for="">
+                                    <input class="form-control form-control-sm" type="text" value="{{ value }}" disabled>
+                                        <a href="{{ path('users_training_delete', {'id': key}) }}"><i class="fa fa-minus-square btn-delete"> </i></a>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                {% else %}
+                <p>Vous n'avez pas encore de formations: </p><br/>
+                    <p>Incrivez-vous <a href="{{ path('inscription_etudiant') }}">ici</a></p>
+                {% endif %}
+            </div>
+        </fieldset>
+
+    {{ form_start(form, {'attr': {'id': 'formeDebutant'}}) }}
+        <!-- The Modal DEBUTANT -->
+        <div class="modal fade" id="debutant" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Formation débutant</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                          {{ form_row(form.label) }}
+                          {{ form_row(form.label_avance) }}
+                          {{ form_row(form.label_expert) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="addDebutant">Ajouter</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
+    {{ form_start(formAvance, {'attr': {'id': 'formeAvance'}}) }}
+        <!-- The Modal AVANCE -->
+        <div class="modal fade" id="avance" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Formation avancé</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(formAvance.label) }}
+                        {{ form_row(formAvance.label_avance) }}
+                        {{ form_row(formAvance.label_expert) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="addAvance">Ajouter</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(formAvance) }}
+
+    {{ form_start(formExpert, {'attr': {'id': 'formeExpert'}}) }}
+    <!-- The Modal Expert -->
+    <div class="modal" id="expert">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Formation expert</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(formExpert.label) }}
+                    {{ form_row(formExpert.label_avance) }}
+                    {{ form_row(formExpert.label_expert) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(formExpert) }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // $(function (){
+        //
+        {#// });#}
+
+
+        $('#debutant').on('show.bs.modal', function (event) {
+            $('#debutant #training_label_avance').detach();
+            $('#debutant #training_label_expert').detach();
+            $('#formeAvance').detach()
+            $('#formeExpert').detach()
+            const button = $(event.relatedTarget) // Button that triggered the modal
+            const levelId = button.data('id') // Extract info from data-* attributes
+
+            $("#formeDebutant").submit(function(e){
+                e.preventDefault();
+                const url = `/users/training/${levelId}/add`;
+                const donnees = {
+                    "label": $('#training_label').val(),
+                    "label_avance": "",
+                    "label_expert": "",
+                }
+                const xhr = new XMLHttpRequest
+                xhr.open("POST", url)
+                xhr.send(JSON.stringify(donnees))
+                window.location.href = "{{ path('users_level') }}"
+            });
+        })
+
+        $('#avance').on('show.bs.modal', function (event) {
+            $('#avance #training_label').detach();
+            $('#avance #training_label_expert').detach();
+            $('#formeDebutant').detach()
+            $('#formeExpert').detach()
+            const button = $(event.relatedTarget) // Button that triggered the modal
+            const levelId = button.data('id') // Extract info from data-* attributes
+            $("#formeAvance").submit(function(e){
+                e.preventDefault();
+                const url = `/users/training/${levelId}/add`;
+                const donnees = {
+                    "label": "",
+                    "label_avance": $('#training_label_avance').val(),
+                    "label_expert": "",
+                }
+                const xhr = new XMLHttpRequest
+                xhr.open("POST", url)
+                xhr.send(JSON.stringify(donnees))
+                window.location.href = "{{ path('users_level') }}"
+            });
+        })
+
+        $('#expert').on('show.bs.modal', function (event) {
+            $('#expert #training_label').detach();
+            $('#expert #training_label_avance').detach();
+            $('#formeDebutant').detach()
+            $('#formeAvance').detach()
+            const button = $(event.relatedTarget) // Button that triggered the modal
+            const levelId = button.data('id') // Extract info from data-* attributes
+            $("#formeExpert").submit(function(e){
+                e.preventDefault();
+                const url = `/users/training/${levelId}/add`;
+                const donnees = {
+                    "label": "",
+                    "label_expert": $('#training_label_expert').val(),
+                    "label_avance": "",
+                }
+                const xhr = new XMLHttpRequest
+                xhr.open("POST", url)
+                xhr.send(JSON.stringify(donnees))
+                window.location.href = "{{ path('users_level') }}"
+            });
+        })
+    </script>
+
+{% endblock %}

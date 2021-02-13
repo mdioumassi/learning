@@ -102,7 +102,14 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
     public function getTrainingByLevelsByUsers(?UserInterface $user)
     {
         return $this->createQueryBuilder('u')
-            ->select('l.id as levelId, t.label as training, l.label as level')
+            ->select(
+                'l.id as levelId, 
+                t.id as trainingId, 
+                t.label, 
+                t.label_avance,
+                t.label_expert,
+                l.label as level'
+            )
             ->innerJoin('u.levels', 'l')
             ->innerJoin('l.trainings', 't')
             ->andWhere('u.id = :val')

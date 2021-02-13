@@ -24,11 +24,12 @@
                     </label>
                     {% endfor %}
                 </div>
-            </form>
+
             <div class="w3-bar w3-margin-bottom">
                 <a href="javascript:history.go(-1)"><button class="w3-button w3-left w3-light-grey">&laquo; Précédent</button></a>
                 <button id="enregistrer" type="submit" class="w3-button w3-right w3-green">Suivant &raquo;</button>
             </div>
+            </form>
         </div>
 
         <div id="Tokyo" class="w3-container w3-border city" style="display:none">
@@ -41,8 +42,8 @@
 {% block javascripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-
-        $(function(){
+     //   $("#debutant").prop("checked", true);
+     /*   $(function(){
             {#$("#back").click(function (ev) {#}
             {#    ev.preventDefault();#}
             {#    window.location.href = "{{ path('users_profile') }}";#}
@@ -50,6 +51,6 @@
             $("#enregistrer").click(function () {
                 $("#form-level").submit();
             });
-        });
+        });*/
     </script>
 {% endblock %}
